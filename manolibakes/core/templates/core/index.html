@@ -1,0 +1,10 @@
+{% extends "core/_base.html" %} {% block content %}
+<div class="date-container">
+    <a href="/"><i class="arrow left"></i></p></a>
+    <h1>{{ date }}</h1>
+    <a href="/"><i class="arrow right"></i></p></a>
+</div>
+{% for i in my_python_object %}
+    <p>{{ i }}</p>
+{% endfor %}
+{% endblock content %}
