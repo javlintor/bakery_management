@@ -13,17 +13,7 @@ class Command(BaseCommand):
         customers = Customer.objects.all()
         # get breads
         breads = Bread.objects.all()
-        # for earch weekday, create some defaults
-        weekdays = [
-            "lunes",
-            "martes",
-            "miércoles",
-            "jueves",
-            "viernes",
-            "sábado",
-            "domingo"
-        ]
-        for customer, bread, weekday in product(customers, breads, weekdays):
+        for customer, bread, weekday in product(customers, breads, WeeklyDefaults.Weekday.values):
             number = random.randrange(5)
             weeklydefault = WeeklyDefaults(
                 customer=customer,
