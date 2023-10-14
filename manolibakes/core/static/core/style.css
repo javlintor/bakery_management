@@ -8,13 +8,12 @@ body {
     display: flex;
     justify-content: center;
     background-color: green;
-    padding: 50px 0;
-
+    padding: 10px 0;
 }
 
 .header a {
     font-family: 'Young Serif', serif;
-    font-size: 50px;
+    font-size: 2em;
     color: white;
     text-decoration: inherit;
 }
@@ -31,16 +30,17 @@ body {
 }
 
 .date-container h1 {
-    font-size: 42px;
+    font-size: 1rem;
     font-family: 'Noto Sans NKo Unjoined', sans-serif;
+    flex: 0 0 300px;
+    text-align: center;
 }
 
 .arrow {
     border: solid black;
-    border-width: 0 10px 10px 0;
+    border-width: 0 5px 5px 0;
     display: inline-block;
-    padding: 10px;
-    bottom: 5px;
+    padding: 5px;
 }
 
 .right {
@@ -51,4 +51,16 @@ body {
 .left {
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
+}
+
+.orders-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 20px;
+}
+
+.order-container {
+    border: 1px solid black;
+    margin: 10px;
+    text-align: center;
 }

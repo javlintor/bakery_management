@@ -1,10 +1,14 @@
 {% extends "core/_base.html" %} {% block content %}
 <div class="date-container">
-    <a href="/"><i class="arrow left"></i></p></a>
-    <h1>{{ date }}</h1>
-    <a href="/"><i class="arrow right"></i></p></a>
+    <a id="left-arrow" href="/?date={{ day_before_iso }}"><i class="arrow left"></i></a>
+    <h1>{{ today_str }}</h1>
+    <a id="right-arrow" href="/?date={{ day_after_iso }}"><i class="arrow right"></i></a>
 </div>
-{% for i in my_python_object %}
-    <p>{{ i }}</p>
-{% endfor %}
+<section class="orders-container">
+    {% for order in orders %}
+        <div class="order-container">
+            <p>{{ order.customer }} necesita {{ order.number}} {{ order.bread }}</p>
+        </div>
+    {% endfor %}
+</section>
 {% endblock content %}
