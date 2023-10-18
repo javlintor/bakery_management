@@ -5,10 +5,25 @@
     <a id="right-arrow" href="/?date={{ day_after_iso }}"><i class="arrow right"></i></a>
 </div>
 <section class="orders-container">
-    {% for order in orders %}
-        <div class="order-container">
-            <p>{{ order.customer }} necesita {{ order.number}} {{ order.bread }}</p>
-        </div>
-    {% endfor %}
+    <table>
+        <thead>
+        <tr>
+            <th></th>  <!-- This cell is for the index name -->
+            {% for column in order_table.columns %}
+            <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for index, row in order_table.iterrows %}
+        <tr>
+            <th>{{ index }}</th>  <!-- This cell is for the index value -->
+            {% for value in row %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </section>
 {% endblock content %}

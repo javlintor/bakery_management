@@ -76,7 +76,7 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             "--days",
-            default=3,
+            default=10,
             help="Number of days ahead for computation"
         )
         parser.add_argument(
