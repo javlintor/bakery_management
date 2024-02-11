@@ -1,29 +1,21 @@
-{% extends "core/_base.html" %} {% block content %}
-<div class="date-container">
-    <a id="left-arrow" href="/?date={{ day_before_iso }}"><i class="arrow left"></i></a>
-    <h1>{{ today_str }}</h1>
-    <a id="right-arrow" href="/?date={{ day_after_iso }}"><i class="arrow right"></i></a>
+{% extends "core/_base.html" %} 
+{% block content %}
+<div class='h-flex jc-center'>
+<h2 class='seconday-title'>Pedidos</h2>
 </div>
-<section class="orders-container">
-    <table>
-        <thead>
-        <tr>
-            <th></th>  <!-- This cell is for the index name -->
-            {% for column in order_table.columns %}
-            <th>{{ column }}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for index, row in order_table.iterrows %}
-        <tr>
-            <th>{{ index }}</th>  <!-- This cell is for the index value -->
-            {% for value in row %}
-            <td>{{ value }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="h-flex jc-center">
+    <div class='w-40 date-container'>
+        <a id="left-arrow" href="{% url 'core:pedidos' date=day_before_iso %}"><i class="arrow left"></i></a>
+        <h1 class='w-40'>{{ date_long_str }}</h1>
+        <a id="right-arrow" href="{% url 'core:pedidos' date=day_after_iso %}"><i class="arrow right"></i></a>
+    </div>
+</div>
+<section class="v-flex">
+    {% for order in orders %}
+    <div class='h-flex w-30'>
+        <p>{{ order.name }}</p>
+        <p>{{ order.total_units }}</p>
+    </div>
+    {% endfor %}
 </section>
 {% endblock content %}

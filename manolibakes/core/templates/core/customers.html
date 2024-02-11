@@ -1,0 +1,10 @@
+{% extends "core/_base.html" %} {% block content %}
+<div class='h-flex jc-center'>
+    <h2 class='seconday-title'>Clientes</h2>
+</div>
+<section class='v-flex'>
+    {% for customer in customers %}
+    <a href='{% url 'core:cliente' customer_id=customer.id date=date %}' class='customer'>{{ customer }}</p>
+    {% endfor %}
+</section>
+{% endblock content %}

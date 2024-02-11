@@ -5,7 +5,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from pydantic import PositiveInt
 import datetime
 
-from core.models import WeeklyDefaults, Order, Customer, Bread
+from core.models import WeeklyDefaults, Order, Customer, Bread, DailyDefaults
 
 
 class CustomerQueryError(Exception):
@@ -24,8 +24,7 @@ def validate_days(days: int):
 
 
 def get_customer_list(
-        name: Optional[str] = None,
-        lastname: Optional[str] = None
+    name: Optional[str] = None, lastname: Optional[str] = None
 ) -> List[Customer]:
     if name is None:
         customers = Customer.objects.all()
@@ -56,34 +55,32 @@ class Command(BaseCommand):
         parser.add_argument(
             "--customer-name",
             help="Name of the customer whose defualt order is going to be computed. "
-                 "If None, all customers will be computed"
+            "If None, all customers will be computed",
         )
         parser.add_argument(
             "--customer-lastname",
             help="Lastname of the customer whose defualt order is going to be computed. "
-                 "If --customer-name is None, this argument is ignored."
-                 "If --customer-name is not None and --customer-lastname is, raise an exception"
+            "If --customer-name is None, this argument is ignored."
+            "If --customer-name is not None and --customer-lastname is, raise an exception",
         )
         parser.add_argument(
             "--weekday",
             help="Name of the weekday whose defualt order is going to be computed. "
-                 "If None, all weekdays will be computed"
+            "If None, all weekdays will be computed",
         )
         parser.add_argument(
             "--bread",
             help="Name of the bread whose defualt order is going to be computed. "
-                 "If None, all breads will be computed"
+            "If None, all breads will be computed",
         )
         parser.add_argument(
-            "--days",
-            default=10,
-            help="Number of days ahead for computation"
+            "--days", default=2, help="Number of days ahead for computation"
         )
         parser.add_argument(
             "--date-from",
             default=datetime.date.today(),
             type=lambda s: datetime.date.fromisoformat(s),
-            help="First date for computation in YYYY-MM-DD format"
+            help="First date for computation in YYYY-MM-DD format",
         )
 
     def handle(self, *args, **options):
@@ -100,16 +97,26 @@ class Command(BaseCommand):
         for customer, bread, days_future in iterable:
             date = date_from + datetime.timedelta(days=days_future)
             weekday = date.weekday()
+            number = 0
             try:
                 weekly_default = WeeklyDefaults.objects.get(
                     customer=customer, bread=bread, weekday=weekday
                 )
+                number += weekly_default.number
             except WeeklyDefaults.DoesNotExist:
-                continue
-            order, created = Order.objects.get_or_create(
+                pass
+            try:
+                daily_default = DailyDefaults.objects.get(
+                    customer=customer,
+                    bread=bread,
+                )
+                number += daily_default.number
+            except DailyDefaults.DoesNotExist:
+                pass
+            order, _ = Order.objects.get_or_create(
                 customer=customer,
                 bread=bread,
                 date=date,
             )
-            order.number = weekly_default.number
+            order.number = number
             order.save()

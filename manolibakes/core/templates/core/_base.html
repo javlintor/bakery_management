@@ -22,9 +22,14 @@
 
 <body>
 <nav class="header">
-    <a class="nostyle" href="/">Manoli Bakes</a>
+    <a href="/" class="header-title">Manoli Bakes</a>
+    <div class='h-flex gap-20'>
+        <a class="header-element underline-hover" href='{% url 'core:pedidos' date=date%}'>Pedidos</a>
+        <a class="header-element underline-hover" href='{% url 'core:clientes' date=date%}'>Clientes</a>
+        <a class="header-element underline-hover" href='{% url 'core:panes' date=date%}'>Panes</a>
+    </div>
 </nav>
-<div class="main-container">
+<div>
     {% block content %} {% endblock content %}
 </div>
 </body>
