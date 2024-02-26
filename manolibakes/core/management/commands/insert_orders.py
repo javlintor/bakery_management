@@ -41,7 +41,7 @@ def get_customer(name: str, lastname: str) -> Customer:
         return customer
     except (MultipleObjectsReturned, ObjectDoesNotExist) as e:
         msg = f"""
-        Error quering customer 
+        Error quering customer
         name={name}, lastname={lastname}
         {e}
         """

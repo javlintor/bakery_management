@@ -6,7 +6,6 @@ from core.models import Customer, Bread, WeeklyDefaults
 
 
 class Command(BaseCommand):
-    help = "Closes the specified poll for voting"
 
     def handle(self, *args, **options):
         # get customers

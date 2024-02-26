@@ -42,7 +42,7 @@ def index(request, date=None):
 
 def customers(request, date=None):
     dates = get_dates(date)
-    customers = Customer.objects.all().order_by('name', 'lastname')
+    customers = Customer.objects.all().order_by("name", "lastname")
     context = {"customers": customers, **dates}
     return render(request, "core/customers.html", context)
 
@@ -55,8 +55,8 @@ def breads(request, date=None):
 
 
 def save_customer_data(request, customer_id, date):
-    data = str(request.body).replace("'", '').split('&')[1:]
-    data = [d.split('=') for d in data]
+    data = str(request.body).replace("'", "").split("&")[1:]
+    data = [d.split("=") for d in data]
     for bread_id, number in data:
         order = Order.objects.get(customer_id=customer_id, date=date, bread_id=bread_id)
         order.number = int(number)
@@ -75,7 +75,7 @@ def customer(request, customer_id, date):
 
 
 def test(request):
-    date = '2024-01-06'
+    date = "2024-01-06"
     dates = get_dates(date)
     context = {**dates}
     return render(request, "core/test.html", context)
