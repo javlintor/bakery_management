@@ -5,3 +5,4 @@ excalidraw/
 .vscode
 venv
 stacks
+.env
