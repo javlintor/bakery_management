@@ -1,13 +1,14 @@
 # Pull base image
 FROM python:3.10
 
-# ENV LC_ALL="es_ES.UTF-8"
-# ENV LC_CTYPE="es_ES.UTF-8"
-
 # Install dependencies
+RUN apt-get clean && apt-get update && apt-get install -y locales \
+    && sed -i '/es_ES.UTF-8/s/^# //' /etc/locale.gen \
+    && locale-gen
 COPY ./requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
 
 COPY manolibakes /app
 COPY data /var/sqlite

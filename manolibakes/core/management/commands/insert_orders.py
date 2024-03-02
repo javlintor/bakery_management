@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+import logging
 from itertools import product
 from typing import Optional, List
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
@@ -89,13 +90,14 @@ class Command(BaseCommand):
         customers = get_customer_list(customer_name, customer_lastname)
         breads = Bread.objects.all()
         # validate weekday
-        days: PositiveInt = options["days"]
+        days: PositiveInt = int(options["days"])
         validate_days(days)
         # date_from
         date_from = options["date_from"]
         iterable = product(customers, breads, range(days))
         for customer, bread, days_future in iterable:
             date = date_from + datetime.timedelta(days=days_future)
+            logging.info(f"Inserting orders for date {date}...")
             weekday = date.weekday()
             number = 0
             try:
