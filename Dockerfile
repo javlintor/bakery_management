@@ -1,17 +1,24 @@
 # Pull base image
-FROM python:3.11.4-slim-bullseye
+FROM python:3.10
 
-# Set environment variables
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set work directory
-WORKDIR /code
+# ENV LC_ALL="es_ES.UTF-8"
+# ENV LC_CTYPE="es_ES.UTF-8"
 
 # Install dependencies
 COPY ./requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Copy project
-COPY . .
+COPY manolibakes /app
+COPY data /var/sqlite
+
+RUN groupadd -r manolibakesgroup \
+    && useradd -r -g manolibakesgroup manolibakesuser \
+    && chown manolibakesuser:manolibakesgroup -R /app \
+    && chmod 755 -R /var/sqlite
+
+WORKDIR /app
+
+USER manolibakesuser
+
+ENTRYPOINT [ "python3", "/app/manage.py", "runserver" ]
