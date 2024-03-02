@@ -1,0 +1,33 @@
+{% extends 'core/_base.html' %} {% block content %}
+  <div class="h-flex jc-center">
+    <h2 class="seconday-title">{{ customer }}</h2>
+  </div>
+  <div class="h-flex jc-center">
+    <div class="w-40 date-container">
+      <a id="left-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_before_iso %}"><i class="arrow left"></i></a>
+      <h1 class="w-40">{{ date_long_str }}</h1>
+      <a id="right-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_after_iso %}"><i class="arrow right"></i></a>
+    </div>
+    <div>
+      <a href="/">Valores por defecto</a>
+    </div>
+  </div>
+  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method='POST'>
+    {% csrf_token %}
+    <section class="v-flex">
+      {% for order in orders %}
+        <div class="h-flex w-30">
+          <label for="choice{{ forloop.counter }}">{{ order.bread.name }}</label>
+          <input name="{{ order.bread.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}" class="input" />
+        </div>
+      {% endfor %}
+    </section>
+    <div class="h-flex jc-center gap-20">
+      <button type="button" id="plus" class="incremental-button">+</button>
+      <button type="button" id="minus" class="incremental-button">-</button>
+    </div>
+    <div class="h-flex jc-center">
+      <button type="submit" class="save-button">Guardar</button>
+    </div>
+  </form>
+{% endblock %}

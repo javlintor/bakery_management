@@ -1,0 +1,37 @@
+<!-- templates/_base.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Manoli Bakes</title>
+    <link
+            rel="icon"
+            type="image/x-icon"
+            href="{% static 'images/logo.webp' %}"
+    />
+    <link rel="stylesheet" href="{% static 'core/style.css' %}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+NKo+Unjoined&family=Young+Serif&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<nav class="header">
+    <a href="/" class="header-title">Manoli Bakes</a>
+    <div class='h-flex gap-20'>
+        <a class="header-element underline-hover" href='{% url 'core:pedidos' date=date%}'>Pedidos</a>
+        <a class="header-element underline-hover" href='{% url 'core:clientes' date=date%}'>Clientes</a>
+        <a class="header-element underline-hover" href='{% url 'core:panes' date=date%}'>Panes</a>
+    </div>
+</nav>
+<div>
+    {% block content %} {% endblock content %}
+</div>
+</body>
+<script src="{% static 'core/script.js' %}"></script>
+</html>

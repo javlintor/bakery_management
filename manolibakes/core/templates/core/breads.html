@@ -1,0 +1,10 @@
+{% extends "core/_base.html" %} {% block content %}
+<div class='h-flex jc-center'>
+<h2 class='seconday-title'>Panes</h2>
+</div>
+<section class='v-flex'>
+    {% for bread in breads %}
+    <p>{{ bread }}</p>
+    {% endfor %}
+</section>
+{% endblock content %}

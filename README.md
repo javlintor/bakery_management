@@ -1,2 +1,5 @@
-# bakery_management
-django app to manage a bakery
+# Manoli bakes
+
+Customized solution to manage a bakery orders
+
+This repo contains a django app
