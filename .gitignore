@@ -6,3 +6,4 @@ excalidraw/
 venv
 stacks
 .env
+*.env
