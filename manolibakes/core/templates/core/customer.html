@@ -9,10 +9,10 @@
       <a id="right-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_after_iso %}"><i class="arrow right"></i></a>
     </div>
     <div>
-      <a href="/">Valores por defecto</a>
+      <a href="{% url 'core:cliente_valores_defecto' customer_id=customer.id %}">Valores por defecto</a>
     </div>
   </div>
-  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method='POST'>
+  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST">
     {% csrf_token %}
     <section class="v-flex">
       {% for order in orders %}

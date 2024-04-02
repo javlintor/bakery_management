@@ -1,8 +1,11 @@
 import datetime
+from django.db import connection
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Sum
-from .models import Order, Customer, Bread
+from .models import Order, Customer, Bread, DailyDefaults
+from core.utils import get_post_data
 import locale
 import logging
 
@@ -55,12 +58,31 @@ def breads(request, date=None):
 
 
 def save_customer_data(request, customer_id, date):
-    data = str(request.body).replace("'", "").split("&")[1:]
-    data = [d.split("=") for d in data]
+    data = get_post_data(request)
     for bread_id, number in data:
         order = Order.objects.get(customer_id=customer_id, date=date, bread_id=bread_id)
         order.number = int(number)
         order.save()
+
+
+def save_customer_daily_defaults(request, customer_id):
+    data = get_post_data(request)
+    for bread_id, number in data:
+        try:
+            daily_default = DailyDefaults.objects.get(
+                customer_id=customer_id, bread_id=bread_id
+            )
+            if number == 0:
+                daily_default.delete()
+                continue
+            daily_default.number = number
+        except ObjectDoesNotExist:
+            if number == 0:
+                continue
+            daily_default = DailyDefaults(
+                customer_id=customer_id, bread_id=bread_id, number=number
+            )
+        daily_default.save()
 
 
 def customer(request, customer_id, date):
@@ -74,8 +96,20 @@ def customer(request, customer_id, date):
     return render(request, "core/customer.html", context)
 
 
-def test(request):
-    date = "2024-01-06"
+def customer_daily_defaults(request, customer_id, date=None):
     dates = get_dates(date)
-    context = {**dates}
-    return render(request, "core/test.html", context)
+    if request.method == "POST":
+        save_customer_daily_defaults(request, customer_id)
+        return HttpResponseRedirect(reverse("core:index"))
+    customer = Customer.objects.get(pk=customer_id)
+    query = """
+        SELECT b.name, b.id, IFNULL(dd.number, 0) AS number FROM core_bread b
+        LEFT OUTER JOIN core_dailydefaults dd
+        ON dd.bread_id = b.id AND dd.customer_id = %s
+        ORDER BY number DESC
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query, [customer_id])
+        daily_defaults = cursor.fetchall()
+    context = {"customer": customer, "daily_defaults": daily_defaults, **dates}
+    return render(request, "core/customer_daily_defaults.html", context)

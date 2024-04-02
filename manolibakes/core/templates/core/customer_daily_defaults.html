@@ -1,0 +1,23 @@
+{% extends 'core/_base.html' %} {% block content %}
+  <div class="h-flex jc-center">
+    <h2 class="seconday-title">{{ customer }}</h2>
+  </div>
+  <form action="{% url 'core:cliente_valores_defecto' customer_id=customer.id %}" method="POST">
+    {% csrf_token %}
+    <section class="v-flex">
+      {% for daily_default in daily_defaults %}
+        <div class="h-flex w-30">
+          <label for="choice{{ forloop.counter }}">{{ daily_default.0 }}</label>
+          <input name="{{ daily_default.1 }}" id="choice{{ forloop.counter }}" value="{{ daily_default.2 }}" class="input" />
+        </div>
+      {% endfor %}
+    </section>
+    <div class="h-flex jc-center gap-20">
+      <button type="button" id="plus" class="incremental-button">+</button>
+      <button type="button" id="minus" class="incremental-button">-</button>
+    </div>
+    <div class="h-flex jc-center">
+      <button type="submit" class="save-button">Guardar</button>
+    </div>
+  </form>
+{% endblock %}
