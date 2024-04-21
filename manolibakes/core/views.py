@@ -1,18 +1,21 @@
 import datetime
-from django.db import connection
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Sum
-from .models import Order, Customer, Bread, DailyDefaults
-from core.utils import get_post_data
+from .models import Customer, Bread
+from core.services.customer import (
+    get_daily_defaults,
+    save_customer_daily_defaults,
+    get_customer_final_orders,
+    save_customer_data,
+)
 import locale
 import logging
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
 
-def get_dates(date_str):
+def get_dates(date_str: str) -> dict:
     if date_str is None:
         date = datetime.date.today()
     else:
@@ -57,42 +60,22 @@ def breads(request, date=None):
     return render(request, "core/breads.html", context)
 
 
-def save_customer_data(request, customer_id, date):
-    data = get_post_data(request)
-    for bread_id, number in data:
-        order = Order.objects.get(customer_id=customer_id, date=date, bread_id=bread_id)
-        order.number = int(number)
-        order.save()
-
-
-def save_customer_daily_defaults(request, customer_id):
-    data = get_post_data(request)
-    for bread_id, number in data:
-        try:
-            daily_default = DailyDefaults.objects.get(
-                customer_id=customer_id, bread_id=bread_id
-            )
-            if number == 0:
-                daily_default.delete()
-                continue
-            daily_default.number = number
-        except ObjectDoesNotExist:
-            if number == 0:
-                continue
-            daily_default = DailyDefaults(
-                customer_id=customer_id, bread_id=bread_id, number=number
-            )
-        daily_default.save()
-
-
 def customer(request, customer_id, date):
     if request.method == "POST":
         save_customer_data(request, customer_id, date)
-        return HttpResponseRedirect(reverse("core:index"))
+        return HttpResponseRedirect(
+            reverse(
+                "core:cliente",
+                kwargs={
+                    "customer_id": customer_id,
+                    "date": date,
+                },
+            )
+        )
+    orders = get_customer_final_orders(customer_id, date)
+    _customer = Customer.objects.get(pk=customer_id)
     dates = get_dates(date)
-    orders = Order.objects.filter(customer_id=customer_id, date=dates["date"])
-    customer = Customer.objects.get(pk=customer_id)
-    context = {"customer": customer, "orders": orders, **dates}
+    context = {"customer": _customer, "orders": orders, **dates}
     return render(request, "core/customer.html", context)
 
 
@@ -100,16 +83,13 @@ def customer_daily_defaults(request, customer_id, date=None):
     dates = get_dates(date)
     if request.method == "POST":
         save_customer_daily_defaults(request, customer_id)
-        return HttpResponseRedirect(reverse("core:index"))
+        return HttpResponseRedirect(
+            reverse(
+                "core:cliente_valores_defecto_diarios",
+                kwargs={"customer_id": customer_id},
+            )
+        )
     customer = Customer.objects.get(pk=customer_id)
-    query = """
-        SELECT b.name, b.id, IFNULL(dd.number, 0) AS number FROM core_bread b
-        LEFT OUTER JOIN core_dailydefaults dd
-        ON dd.bread_id = b.id AND dd.customer_id = %s
-        ORDER BY number DESC
-    """
-    with connection.cursor() as cursor:
-        cursor.execute(query, [customer_id])
-        daily_defaults = cursor.fetchall()
+    daily_defaults = get_daily_defaults(customer_id)
     context = {"customer": customer, "daily_defaults": daily_defaults, **dates}
     return render(request, "core/customer_daily_defaults.html", context)
