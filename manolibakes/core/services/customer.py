@@ -16,11 +16,11 @@ def get_customer_final_orders(customer_id: int, date: str) -> list[OrderDTO]:
         LEFT OUTER JOIN core_dailydefaults dd
         ON dd.bread_id = b.id AND dd.customer_id = :customer_id
         LEFT OUTER JOIN core_order o
-        ON o.bread_id = b.id AND o.customer_id = :customer_id AND o.date = ':date'
-        ORDER BY number DESC;
+        ON o.bread_id = b.id AND o.customer_id = :customer_id AND o.date = :date
+        ORDER BY number DESC, name;
     """
     with connection.cursor() as cursor:
-        cursor.execute(query, {'customer_id': customer_id, 'date': date})
+        cursor.execute(query, {"customer_id": customer_id, "date": date})
         orders = cursor.fetchall()
     orders = [OrderDTO(name=order[0], id=order[1], number=order[2]) for order in orders]
     return orders
@@ -68,18 +68,28 @@ def save_customer_data(request, customer_id, date):
     data = get_post_data(request)
     for bread_id, number in data:
         number = int(number)
-        # try:
-        #     order = Order.objects.get(
-        #         customer_id=customer_id, bread_id=bread_id, date=date
-        #     )
-        #     if order.number == 0:
-        #         order.delete()
-        #         continue
-        #     order.number = number
-        # except ObjectDoesNotExist:
-        #     if number == 0:
-        #         continue
-        #     daily_default = DailyDefaults(
-        #         customer_id=customer_id, bread_id=bread_id, number=number
-        #     )
-        # daily_default.save()
+        order_exists = True
+        try:
+            order = Order.objects.get(
+                customer_id=customer_id, bread_id=bread_id, date=date
+            )
+            order_number = order.number
+        except ObjectDoesNotExist:
+            order_exists = False
+            order_number = 0
+        try:
+            daily_default = DailyDefaults.objects.get(
+                customer_id=customer_id, bread_id=bread_id
+            )
+            daily_default_number = daily_default.number
+        except ObjectDoesNotExist:
+            daily_default_number = 0
+        if number == order_number:
+            continue
+
+        if number == daily_default_number:
+            if order_exists:
+                order.delete()
+            continue
+        new_order = Order(customer_id=customer_id, bread_id=bread_id, date=date, number=number)
+        new_order.save()

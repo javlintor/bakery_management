@@ -1,7 +1,6 @@
 import datetime
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
-from django.db.models import Sum
 from .models import Customer, Bread
 from core.services.customer import (
     get_daily_defaults,
@@ -9,6 +8,7 @@ from core.services.customer import (
     get_customer_final_orders,
     save_customer_data,
 )
+from core.services.orders import get_orders
 import locale
 import logging
 
@@ -39,9 +39,7 @@ def get_dates(date_str: str) -> dict:
 
 def index(request, date=None):
     dates = get_dates(date)
-    orders = Bread.objects.filter(order__date=dates["date"]).annotate(
-        total_units=Sum("order__number")
-    )
+    orders = get_orders(date)
     context = {"orders": orders, **dates}
     return render(request, "core/index.html", context)
 
