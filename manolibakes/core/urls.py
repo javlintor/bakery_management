@@ -10,5 +10,9 @@ urlpatterns = [
     path("clientes/<str:date>", views.customers, name="clientes"),
     path("panes/<str:date>", views.breads, name="panes"),
     path("cliente/<int:customer_id>/<str:date>", views.customer, name="cliente"),
-    path("test", views.test, name="test"),
+    path(
+        "cliente/valores_defecto_diarios/<int:customer_id>",
+        views.customer_daily_defaults,
+        name="cliente_valores_defecto_diarios",
+    ),
 ]

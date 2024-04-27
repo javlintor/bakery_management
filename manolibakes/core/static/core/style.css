@@ -2,6 +2,7 @@ body {
     margin: 0;
 }
 
+
 html {
     font-size: 24px;
     font-family: "Poppins", sans-serif;
@@ -9,6 +10,21 @@ html {
 
 a {
     color: rgb(82, 92, 36);
+}
+
+.main-block {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin: 0 20% 5% 20%;
+}
+
+.mx-8 {
+    margin: 40px 0;
+}
+
+.my-8 {
+    margin: 40px 0;
 }
 
 .header {
@@ -51,6 +67,7 @@ a {
     font-family: 'Noto Sans NKo Unjoined', sans-serif;
     color: #007a45;
     font-size: 2rem;
+    margin: 10px;
 }
 
 .arrow {
@@ -145,8 +162,8 @@ a {
     background-color: #636262;
     font-size: 1rem;
     color: white;
-    width: 4vw;
-    height: 4vw;
+    width: 2vw;
+    height: 2vw;
     border-radius: 5px;
     text-align: center;
 }
@@ -157,9 +174,8 @@ a {
     border-radius: 10px;
     font-size: 2rem;
     border: 1px solid black;
-    width: 6vw;
-    height: 6vw;
-    padding: 4px;
+    width: 5vw;
+    height: 5vw;
 }
 
 .disable {
@@ -180,6 +196,17 @@ a {
 .save-button:hover {
     color: white;
     background-color: #336034;
+}
+
+.cool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 5px;
+    column-gap: 40px;
+}
+
+.bg-orange {
+    background-color: rgb(176, 121, 19);
 }
 
 @media screen and (max-width: 1200px) {

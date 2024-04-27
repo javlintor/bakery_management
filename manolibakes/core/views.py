@@ -1,15 +1,21 @@
 import datetime
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
-from django.db.models import Sum
-from .models import Order, Customer, Bread
+from .models import Customer, Bread
+from core.services.customer import (
+    get_daily_defaults,
+    save_customer_daily_defaults,
+    get_customer_final_orders,
+    save_customer_data,
+)
+from core.services.orders import get_orders
 import locale
 import logging
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
 
-def get_dates(date_str):
+def get_dates(date_str: str) -> dict:
     if date_str is None:
         date = datetime.date.today()
     else:
@@ -33,9 +39,7 @@ def get_dates(date_str):
 
 def index(request, date=None):
     dates = get_dates(date)
-    orders = Bread.objects.filter(order__date=dates["date"]).annotate(
-        total_units=Sum("order__number")
-    )
+    orders = get_orders(dates['date'])
     context = {"orders": orders, **dates}
     return render(request, "core/index.html", context)
 
@@ -54,28 +58,36 @@ def breads(request, date=None):
     return render(request, "core/breads.html", context)
 
 
-def save_customer_data(request, customer_id, date):
-    data = str(request.body).replace("'", "").split("&")[1:]
-    data = [d.split("=") for d in data]
-    for bread_id, number in data:
-        order = Order.objects.get(customer_id=customer_id, date=date, bread_id=bread_id)
-        order.number = int(number)
-        order.save()
-
-
 def customer(request, customer_id, date):
     if request.method == "POST":
         save_customer_data(request, customer_id, date)
-        return HttpResponseRedirect(reverse("core:index"))
+        return HttpResponseRedirect(
+            reverse(
+                "core:cliente",
+                kwargs={
+                    "customer_id": customer_id,
+                    "date": date,
+                },
+            )
+        )
+    orders = get_customer_final_orders(customer_id, date)
+    _customer = Customer.objects.get(pk=customer_id)
     dates = get_dates(date)
-    orders = Order.objects.filter(customer_id=customer_id, date=dates["date"])
-    customer = Customer.objects.get(pk=customer_id)
-    context = {"customer": customer, "orders": orders, **dates}
+    context = {"customer": _customer, "orders": orders, **dates}
     return render(request, "core/customer.html", context)
 
 
-def test(request):
-    date = "2024-01-06"
+def customer_daily_defaults(request, customer_id, date=None):
     dates = get_dates(date)
-    context = {**dates}
-    return render(request, "core/test.html", context)
+    if request.method == "POST":
+        save_customer_daily_defaults(request, customer_id)
+        return HttpResponseRedirect(
+            reverse(
+                "core:cliente_valores_defecto_diarios",
+                kwargs={"customer_id": customer_id},
+            )
+        )
+    customer = Customer.objects.get(pk=customer_id)
+    daily_defaults = get_daily_defaults(customer_id)
+    context = {"customer": customer, "daily_defaults": daily_defaults, **dates}
+    return render(request, "core/customer_daily_defaults.html", context)

@@ -9,20 +9,20 @@
       <a id="right-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_after_iso %}"><i class="arrow right"></i></a>
     </div>
     <div>
-      <a href="/">Valores por defecto</a>
+      <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}">Valores por defecto diarios</a>
     </div>
   </div>
-  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method='POST'>
+  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST">
     {% csrf_token %}
     <section class="v-flex">
       {% for order in orders %}
         <div class="h-flex w-30">
-          <label for="choice{{ forloop.counter }}">{{ order.bread.name }}</label>
-          <input name="{{ order.bread.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}" class="input" />
+          <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
+          <input name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}" class="input" />
         </div>
       {% endfor %}
     </section>
-    <div class="h-flex jc-center gap-20">
+    <div class="h-flex jc-center gap-20 my-8">
       <button type="button" id="plus" class="incremental-button">+</button>
       <button type="button" id="minus" class="incremental-button">-</button>
     </div>
