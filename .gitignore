@@ -7,3 +7,5 @@ venv
 stacks
 .env
 *.env
+/data
+

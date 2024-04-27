@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.12"
 django = "^5.0.4"
 pydantic = "^2.7.1"
+psycopg = "^3.1.18"
+sqlalchemy = "^2.0.29"
 
 
 [build-system]

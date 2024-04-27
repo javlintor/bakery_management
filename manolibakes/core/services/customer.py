@@ -11,16 +11,16 @@ def get_customer_final_orders(customer_id: int, date: str) -> list[OrderDTO]:
         SELECT
             b.name,
             b.id,
-            IFNULL(IFNULL(o.number, dd.number), 0) AS number
+            COALESCE(COALESCE(o.number, dd.number), 0) AS number
         FROM core_bread b
         LEFT OUTER JOIN core_dailydefaults dd
-        ON dd.bread_id = b.id AND dd.customer_id = :customer_id
+        ON dd.bread_id = b.id AND dd.customer_id = %s
         LEFT OUTER JOIN core_order o
-        ON o.bread_id = b.id AND o.customer_id = :customer_id AND o.date = :date
+        ON o.bread_id = b.id AND o.customer_id = %s AND o.date = %s
         ORDER BY number DESC, name;
     """
     with connection.cursor() as cursor:
-        cursor.execute(query, {"customer_id": customer_id, "date": date})
+        cursor.execute(query, [customer_id, customer_id, date])
         orders = cursor.fetchall()
     orders = [OrderDTO(name=order[0], id=order[1], number=order[2]) for order in orders]
     return orders
@@ -49,7 +49,7 @@ def save_customer_daily_defaults(request, customer_id):
 
 def get_daily_defaults(customer_id) -> Iterable[OrderDTO]:
     query = """
-        SELECT b.name, b.id, IFNULL(dd.number, 0) AS number FROM core_bread b
+        SELECT b.name, b.id, COALESCE(dd.number, 0) AS number FROM core_bread b
         LEFT OUTER JOIN core_dailydefaults dd
         ON dd.bread_id = b.id AND dd.customer_id = %s
         ORDER BY number DESC
@@ -91,5 +91,7 @@ def save_customer_data(request, customer_id, date):
             if order_exists:
                 order.delete()
             continue
-        new_order = Order(customer_id=customer_id, bread_id=bread_id, date=date, number=number)
+        new_order = Order(
+            customer_id=customer_id, bread_id=bread_id, date=date, number=number
+        )
         new_order.save()

@@ -39,7 +39,7 @@ def get_dates(date_str: str) -> dict:
 
 def index(request, date=None):
     dates = get_dates(date)
-    orders = get_orders(date)
+    orders = get_orders(dates['date'])
     context = {"orders": orders, **dates}
     return render(request, "core/index.html", context)
 
