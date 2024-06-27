@@ -28,6 +28,11 @@
         <a class="header-element underline-hover" href='{% url 'core:clientes' date=date%}'>Clientes</a>
         <a class="header-element underline-hover" href='{% url 'core:panes' date=date%}'>Panes</a>
     </div>
+    {% if user.is_authenticated %}
+    <div><a class="header-element underline-hover" href="{% url 'members:logout' %}">Logout</a></div>
+    {% else %}
+    <div><a class="header-element underline-hover" href="{% url 'members:login' %}">Login</a></div>
+    {% endif %}
 </nav>
 <div class="main-block">
     {% block content %} {% endblock content %}

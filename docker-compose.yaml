@@ -5,10 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./data:/var/sqlite
     env_file:
-      - .env
+      - debug.env
     entrypoint:
       [
         "python3",
@@ -24,9 +22,11 @@ services:
 
   db:
     image: postgres:14.1-alpine
+    restart: always
     environment:
       - POSTGRES_USER=postgres_admin
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=manolibakes
     ports:
       - 5432:5432
     volumes:

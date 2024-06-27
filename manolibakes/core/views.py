@@ -1,5 +1,6 @@
 import datetime
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render
+from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from .models import Customer, Bread
 from core.services.customer import (
@@ -11,11 +12,12 @@ from core.services.customer import (
 from core.services.orders import get_orders
 import locale
 import logging
+from django.contrib.auth.decorators import login_required
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
 
-def get_dates(date_str: str) -> dict:
+def get_dates(date_str: str | None = None) -> dict:
     if date_str is None:
         date = datetime.date.today()
     else:
@@ -37,13 +39,15 @@ def get_dates(date_str: str) -> dict:
     }
 
 
+@login_required(login_url='members:login')
 def index(request, date=None):
     dates = get_dates(date)
-    orders = get_orders(dates['date'])
+    orders = get_orders(dates["date"])
     context = {"orders": orders, **dates}
     return render(request, "core/index.html", context)
 
 
+@login_required(login_url='members:login')
 def customers(request, date=None):
     dates = get_dates(date)
     customers = Customer.objects.all().order_by("name", "lastname")
@@ -51,6 +55,7 @@ def customers(request, date=None):
     return render(request, "core/customers.html", context)
 
 
+@login_required(login_url='members:login')
 def breads(request, date=None):
     dates = get_dates(date)
     breads = Bread.objects.all()
@@ -58,6 +63,7 @@ def breads(request, date=None):
     return render(request, "core/breads.html", context)
 
 
+@login_required(login_url='members:login')
 def customer(request, customer_id, date):
     if request.method == "POST":
         save_customer_data(request, customer_id, date)
@@ -77,6 +83,7 @@ def customer(request, customer_id, date):
     return render(request, "core/customer.html", context)
 
 
+@login_required(login_url='members:login')
 def customer_daily_defaults(request, customer_id, date=None):
     dates = get_dates(date)
     if request.method == "POST":
