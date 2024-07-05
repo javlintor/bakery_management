@@ -15,7 +15,9 @@ RUN cd /app \
     && POETRY_VIRTUALENVS_CREATE=false poetry install --no-root\
     && rm -rf $POETRY_CACHE_DIR
 
-COPY manolibakes /app
+RUN mkdir /app/data /app/manolibakes
+
+COPY manolibakes /app/manolibakes
 
 RUN groupadd -r manolibakesgroup \
     && useradd -r -g manolibakesgroup manolibakesuser \
@@ -27,4 +29,4 @@ USER manolibakesuser
 
 EXPOSE 8000
 
-ENTRYPOINT [ "python3", "/app/manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT [ "python3", "/app/manolibakes/manage.py", "runserver", "0.0.0.0:8000"]
