@@ -1,4 +1,5 @@
 import datetime
+from .forms import CustomerForm
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
@@ -39,7 +40,7 @@ def get_dates(date_str: str | None = None) -> dict:
     }
 
 
-@login_required(login_url='members:login')
+@login_required(login_url="members:login")
 def index(request, date=None):
     dates = get_dates(date)
     orders = get_orders(dates["date"])
@@ -47,7 +48,7 @@ def index(request, date=None):
     return render(request, "core/index.html", context)
 
 
-@login_required(login_url='members:login')
+@login_required(login_url="members:login")
 def customers(request, date=None):
     dates = get_dates(date)
     customers = Customer.objects.all().order_by("name", "lastname")
@@ -55,7 +56,7 @@ def customers(request, date=None):
     return render(request, "core/customers.html", context)
 
 
-@login_required(login_url='members:login')
+@login_required(login_url="members:login")
 def breads(request, date=None):
     dates = get_dates(date)
     breads = Bread.objects.all()
@@ -63,7 +64,7 @@ def breads(request, date=None):
     return render(request, "core/breads.html", context)
 
 
-@login_required(login_url='members:login')
+@login_required(login_url="members:login")
 def customer(request, customer_id, date):
     if request.method == "POST":
         save_customer_data(request, customer_id, date)
@@ -83,7 +84,7 @@ def customer(request, customer_id, date):
     return render(request, "core/customer.html", context)
 
 
-@login_required(login_url='members:login')
+@login_required(login_url="members:login")
 def customer_daily_defaults(request, customer_id, date=None):
     dates = get_dates(date)
     if request.method == "POST":
@@ -98,3 +99,25 @@ def customer_daily_defaults(request, customer_id, date=None):
     daily_defaults = get_daily_defaults(customer_id)
     context = {"customer": customer, "daily_defaults": daily_defaults, **dates}
     return render(request, "core/customer_daily_defaults.html", context)
+
+
+@login_required(login_url="members:login")
+def create_customer(request, date=None):
+    dates = get_dates(date)
+    if request.method == "POST":
+        form = CustomerForm(
+            {field: request.POST.getlist(field)[0] for field in request.POST}
+        )
+        if form.is_valid():
+            new_customer = form.save()
+            return HttpResponseRedirect(
+                reverse(
+                    "core:cliente",
+                    kwargs={
+                        "customer_id": new_customer.id,
+                        "date": date,
+                    },
+                )
+            )
+    context = {**dates, "form": CustomerForm}
+    return render(request, "core/create_customer.html", context)

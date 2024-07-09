@@ -15,4 +15,5 @@ urlpatterns = [
         views.customer_daily_defaults,
         name="cliente_valores_defecto_diarios",
     ),
+    path("cliente/create", views.create_customer, name="crear-cliente")
 ]
