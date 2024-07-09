@@ -15,17 +15,11 @@ RUN cd /app \
     && POETRY_VIRTUALENVS_CREATE=false poetry install --no-root\
     && rm -rf $POETRY_CACHE_DIR
 
-RUN mkdir /app/data /app/manolibakes
+RUN mkdir /app/manolibakes /app/data
 
 COPY manolibakes /app/manolibakes
 
-RUN groupadd -r manolibakesgroup \
-    && useradd -r -g manolibakesgroup manolibakesuser \
-    && chown manolibakesuser:manolibakesgroup -R /app
-
 WORKDIR /app
-
-USER manolibakesuser
 
 EXPOSE 8000
 
