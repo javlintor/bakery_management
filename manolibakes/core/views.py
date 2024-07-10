@@ -121,3 +121,38 @@ def create_customer(request, date=None):
             )
     context = {**dates, "form": CustomerForm}
     return render(request, "core/create_customer.html", context)
+
+
+@login_required(login_url="members:login")
+def edit_customer(request, customer_id: int, date=None):
+    dates = get_dates(date)
+    customer = Customer.objects.get(pk=customer_id)
+    if request.method == "POST":
+        form = CustomerForm(
+            {field: request.POST.getlist(field)[0] for field in request.POST},
+            instance=customer,
+        )
+        if form.is_valid():
+            new_customer = form.save()
+            return HttpResponseRedirect(
+                reverse(
+                    "core:cliente",
+                    kwargs={
+                        "customer_id": new_customer.id,
+                        "date": date,
+                    },
+                )
+            )
+    context = {
+        **dates,
+        "form": CustomerForm(instance=customer),
+        "customer_id": customer.id,
+    }
+    return render(request, "core/edit_customer.html", context)
+
+
+@login_required(login_url="members:login")
+def delete_customer(request, customer_id: int):
+    customer = Customer.objects.get(pk=customer_id)
+    customer.delete()
+    return HttpResponseRedirect(reverse("core:clientes", kwargs={"date": None}))

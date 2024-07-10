@@ -183,13 +183,20 @@ a {
 }
 
 .submit-button {
-    color: white;
-    background-color: #4CAF50;
     border-radius: 3px;
     border: 1px solid black;
     font-size: 1rem;
-    width: 5vw;
-    height: 2vw;
+    padding: 0.5rem;
+}
+
+.create-button {
+    color: white;
+    background-color: #4CAF50;
+}
+
+.edit-button, .edit-customer-link {
+    color: white;
+    background-color: #bc6105;
 }
 
 .save-button {
@@ -203,8 +210,12 @@ a {
     height: 4vw;
 }
 
-.save-button:hover, .submit-button:hover {
+.save-button:hover, .create-button:hover {
     background-color: #336034;
+}
+
+.edit-button:hover, .edit-customer-link:hover {
+    background-color: #8f4700;
 }
 
 .cool-grid {
@@ -219,18 +230,40 @@ a {
 }
 
 .custom-link {
-    font: bold 2rem;
     text-decoration: none;
-    background-color: rgb(0, 13, 128);
-    color: #ffffff;
     padding: 1rem;
     border-radius: 10px;
     margin-bottom: 30px;
 }
 
-.custom-link:hover  {
+.add-new-customer-link {
+    background-color: rgb(0, 13, 128);
+    color: #ffffff;
+}
+
+.add-new-customer-link:hover  {
     background-color: rgb(0, 9, 85);
 }
+
+.delete-customer-link {
+    color: white;
+    background-color: rgb(128, 0, 0);
+}
+
+.delete-customer-link:hover  {
+    background-color: rgb(73, 12, 0);
+}
+
+
+.daily-defaults-link {
+    background-color: rgb(81, 0, 168);
+    color: #ffffff;
+}
+
+.daily-defaults-link:hover  {
+    background-color: rgb(62, 0, 127);
+}
+
 
 @media screen and (max-width: 1200px) {
     html {

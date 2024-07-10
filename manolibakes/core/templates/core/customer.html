@@ -8,9 +8,12 @@
       <h1 class="w-40">{{ date_long_str }}</h1>
       <a id="right-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_after_iso %}"><i class="arrow right"></i></a>
     </div>
-    <div>
-      <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}">Valores por defecto diarios</a>
-    </div>
+  </div>
+  <div class="h-flex jc-center">
+    <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" class="custom-link daily-defaults-link">Valores por defecto diarios</a>
+  </div>
+  <div class="h-flex jc-center">
+    <a href="{% url 'core:editar-cliente' customer_id=customer.id %}" class="custom-link edit-customer-link">Editar datos del cliente</a>
   </div>
   <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST">
     {% csrf_token %}

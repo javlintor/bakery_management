@@ -71,6 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "manolibakes.wsgi.application"
 
+SESSION_COOKIE_AGE = 60*60
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
