@@ -9,6 +9,7 @@ urlpatterns = [
     path("pedidos/<str:date>", views.index, name="pedidos"),
     path("clientes/<str:date>", views.customers, name="clientes"),
     path("panes/<str:date>", views.breads, name="panes"),
+    path("pan/<str:bread_id>", views.bread, name="pan"),
     path("cliente/<int:customer_id>/<str:date>", views.customer, name="cliente"),
     path(
         "cliente/valores_defecto_diarios/<int:customer_id>",

@@ -4,7 +4,7 @@
 </div>
 <section class='v-flex'>
     {% for bread in breads %}
-    <p>{{ bread }}</p>
+    <a href='{% url 'core:pan' bread_id=bread.id %}' class='bread'>{{ bread }}</a>
     {% endfor %}
 </section>
 {% endblock content %}

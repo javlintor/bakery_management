@@ -8,4 +8,5 @@ stacks
 .env
 *.env
 /data
+node_modules
 

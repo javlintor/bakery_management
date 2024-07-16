@@ -1,5 +1,5 @@
 import datetime
-from .forms import CustomerForm
+from .forms import CustomerForm, BreadForm
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
@@ -156,3 +156,33 @@ def delete_customer(request, customer_id: int):
     customer = Customer.objects.get(pk=customer_id)
     customer.delete()
     return HttpResponseRedirect(reverse("core:clientes", kwargs={"date": None}))
+
+
+@login_required(login_url="members:login")
+def bread(request, bread_id):
+    dates = get_dates()
+    bread = Bread.objects.get(pk=bread_id)
+    context = {"bread": bread, **dates}
+    return render(request, "core/bread.html", context)
+
+
+@login_required(login_url="members:login")
+def create_bread(request):
+    dates = get_dates()
+    if request.method == "POST":
+        form = BreadForm(
+            {field: request.POST.getlist(field)[0] for field in request.POST}
+        )
+        if form.is_valid():
+            new_bread = form.save()
+            return HttpResponseRedirect(
+                reverse(
+                    "core:bread",
+                    kwargs={
+                        "bread_id": new_bread.id,
+                        "date": None,
+                    },
+                )
+            )
+    context = {**dates, "form": CustomerForm}
+    return render(request, "core/create_bread.html", context)

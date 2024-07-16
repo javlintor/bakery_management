@@ -14,15 +14,16 @@
             type="image/x-icon"
             href="{% static 'images/logo.webp' %}"
     />
-    <link rel="stylesheet" href="{% static 'core/style.css' %}"/>
-    <link rel="stylesheet" href="{% static 'members/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'core/output.css' %}"/>
+    {% comment %} <link rel="stylesheet" href="{% static 'core/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'members/style.css' %}"/> {% endcomment %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+NKo+Unjoined&family=Young+Serif&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<nav class="header">
+<nav class="flex bg-red-400">
     <a href="/" class="header-title">Manoli Bakes</a>
     <div class='h-flex gap-20'>
         <a class="header-element underline-hover" href='{% url 'core:pedidos' date=date%}'>Pedidos</a>

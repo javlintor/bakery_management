@@ -149,12 +149,12 @@ a {
     transition: all 0.3s ease;
 }
 
-.customer {
+.customer, .bread {
     color: rgb(65, 64, 64);
     text-decoration: inherit;
 }
 
-.customer:hover {
+.customer:hover, .bread:hover {
     color: rgb(174, 174, 174);
 }
 

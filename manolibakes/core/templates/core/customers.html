@@ -8,7 +8,9 @@
     </a>
     <br>
     {% for customer in customers %}
-    <a href='{% url 'core:cliente' customer_id=customer.id date=date %}' class='customer'>{{ customer }}</p>
+    <a href='{% url 'core:cliente' customer_id=customer.id date=date %}' class='customer'>
+        {{ customer }}
+    </a>
     {% endfor %}
 </section>
 {% endblock content %}
