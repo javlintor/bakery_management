@@ -28,20 +28,17 @@ def get_dates(date_str: str | None = None) -> dict:
             logging.info("Incorrent date format.")
             date = datetime.date.today()
     date_long_str = date.strftime("%A, %d de %B de %Y")
-    day_before = date - datetime.timedelta(days=1)
-    day_before_iso = day_before.isoformat()
-    day_after = date + datetime.timedelta(days=1)
-    day_after_iso = day_after.isoformat()
+    date_iso_str = date.strftime("%Y-%m-%d")
     return {
         "date": date,
-        "day_before_iso": day_before_iso,
-        "day_after_iso": day_after_iso,
+        "date_iso_str": date_iso_str,
         "date_long_str": date_long_str,
     }
 
 
 @login_required(login_url="members:login")
-def index(request, date=None):
+def index(request):
+    date = request.GET.get("date")
     dates = get_dates(date)
     orders = get_orders(dates["date"])
     context = {"orders": orders, **dates}
@@ -65,9 +62,9 @@ def breads(request, date=None):
 
 
 @login_required(login_url="members:login")
-def customer(request, customer_id, date):
+def customer(request, customer_id, date=None):
     if request.method == "POST":
-        save_customer_data(request, customer_id, date)
+        save_customer_data(request, customer_id, date=date)
         return HttpResponseRedirect(
             reverse(
                 "core:cliente",
@@ -77,9 +74,10 @@ def customer(request, customer_id, date):
                 },
             )
         )
-    orders = get_customer_final_orders(customer_id, date)
-    _customer = Customer.objects.get(pk=customer_id)
+    date = request.GET.get("date")
     dates = get_dates(date)
+    orders = get_customer_final_orders(customer_id, dates["date"])
+    _customer = Customer.objects.get(pk=customer_id)
     context = {"customer": _customer, "orders": orders, **dates}
     return render(request, "core/customer.html", context)
 

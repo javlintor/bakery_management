@@ -1,36 +1,39 @@
 {% extends 'core/_base.html' %} {% block content %}
-  <div class="h-flex jc-center">
-    <h2 class="seconday-title">{{ customer }}</h2>
-  </div>
-  <div class="h-flex jc-center">
-    <div class="w-40 date-container">
-      <a id="left-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_before_iso %}"><i class="arrow left"></i></a>
-      <h1 class="w-40">{{ date_long_str }}</h1>
-      <a id="right-arrow" href="{% url 'core:cliente' customer_id=customer.id date=day_after_iso %}"><i class="arrow right"></i></a>
-    </div>
-  </div>
-  <div class="h-flex jc-center">
-    <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" class="custom-link daily-defaults-link">Valores por defecto diarios</a>
-  </div>
-  <div class="h-flex jc-center">
-    <a href="{% url 'core:editar-cliente' customer_id=customer.id %}" class="custom-link edit-customer-link">Editar datos del cliente</a>
-  </div>
-  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST">
-    {% csrf_token %}
-    <section class="v-flex">
-      {% for order in orders %}
-        <div class="h-flex w-30">
-          <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
-          <input name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}" class="input" />
-        </div>
-      {% endfor %}
-    </section>
-    <div class="h-flex jc-center gap-20 my-8">
-      <button type="button" id="plus" class="incremental-button">+</button>
-      <button type="button" id="minus" class="incremental-button">-</button>
-    </div>
-    <div class="h-flex jc-center">
-      <button type="submit" class="save-button">Guardar</button>
-    </div>
+<h1 >👤 {{ customer }}</h1>
+<p>{{ date_long_str }}</p>
+<div class="grid">
+  <form action="{% url 'core:cliente' customer_id=customer.id %}">
+      <input id="date-input" type="date" name="date" aria-label="Date" value="{{ date_iso_str }}" onchange="dateFormHandler(event)" />
   </form>
+  <form action="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" method="get">
+    <button class="secondary">Valores por defecto diarios</button>
+  </form>
+  <form action="{% url 'core:editar-cliente' customer_id=customer.id %}" method="get">
+    <button class="contrast">Editar datos del cliente</button>
+  </form>
+</div>
+<form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST" style="width: max(50vw, 300px)" class='container'>
+  {% csrf_token %}
+  <table>
+      <thead>
+        <tr>
+          <th scope="col">Tipo de pan</th>
+          <th scope="col">Total</th>
+        </tr>
+      <thead>        
+      <tbody>
+      {% for order in orders %}
+      <tr>
+          <th scope="row">
+            <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
+          </th>
+          <td>
+            <input name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}"/>
+          </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+  <button type="submit" >Guardar</button>
+</form>
 {% endblock %}

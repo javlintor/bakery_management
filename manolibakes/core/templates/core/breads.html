@@ -1,10 +1,10 @@
 {% extends "core/_base.html" %} {% block content %}
-<div class='h-flex jc-center'>
-<h2 class='seconday-title'>Panes</h2>
+<div >
+<h2 >Panes</h2>
 </div>
-<section class='v-flex'>
+<section >
     {% for bread in breads %}
-    <a href='{% url 'core:pan' bread_id=bread.id %}' class='bread'>{{ bread }}</a>
+    <a href='{% url 'core:pan' bread_id=bread.id %}' >{{ bread }}</a>
     {% endfor %}
 </section>
 {% endblock content %}

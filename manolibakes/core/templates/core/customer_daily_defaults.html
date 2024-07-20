@@ -1,24 +1,28 @@
 {% extends 'core/_base.html' %} {% block content %}
-  <div class="v-flex">
-    <h2 class="seconday-title">{{ customer }}</h2>
-    <span>Valores por defecto <strong>diarios</strong></span>
-  </div>
-  <form action="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" method="POST">
-    {% csrf_token %}
-    <section class="v-flex">
+<h1 >📅 {{ customer }}</h1>
+<h2>Valores por defecto diarios</h2>
+<form action="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" method="POST" class="container" style="width: max(60vw, 300px)">
+  {% csrf_token %}
+  <table>
+      <thead>
+        <tr>
+          <th scope="col">Tipo de pan</th>
+          <th scope="col">Total</th>
+        </tr>
+      <thead>        
+      <tbody>
       {% for daily_default in daily_defaults %}
-        <div class="h-flex w-30">
-          <label for="choice{{ forloop.counter }}">{{ daily_default.name }}</label>
-          <input name="{{ daily_default.id }}" id="choice{{ forloop.counter }}" value="{{ daily_default.number }}" class="input bg-orange" />
-        </div>
+      <tr>
+          <th scope="row">
+            <label for="choice{{ forloop.counter }}">{{ daily_default.name }}</label>
+          </th>
+          <td>
+            <input name="{{ daily_default.id }}" id="choice{{ forloop.counter }}" value="{{ daily_default.number }}"/>
+          </td>
+      </tr>
       {% endfor %}
-    </section>
-    <div class="h-flex jc-center gap-20 mx-8">
-      <button type="button" id="plus" class="incremental-button">+</button>
-      <button type="button" id="minus" class="incremental-button">-</button>
-    </div>
-    <div class="h-flex jc-center my-8">
-      <button type="submit" class="save-button">Guardar</button>
-    </div>
-  </form>
+      </tbody>
+  </table>
+  <button type="submit" >Guardar</button>
+</form>
 {% endblock %}

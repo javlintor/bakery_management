@@ -1,10 +1,10 @@
 {% extends 'core/_base.html' %} {% block content %}
-  <div class="h-flex jc-center">
-    <h2 class="seconday-title">Añadir un nuevo cliente</h2>
+  <div >
+    <h2 >Añadir un nuevo cliente</h2>
   </div>
   <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <input type="submit" value="Añadir" class='submit-button create-button'>
+      <input type="submit" value="Añadir">
   </form>
 {% endblock content %}

@@ -1,13 +1,12 @@
 {% extends 'core/_base.html' %} {% block content %}
-  <div class="h-flex jc-center">
-    <h2 class="seconday-title color-orange">Editar un cliente</h2>
-  </div>
-  <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Editar" class='submit-button edit-button'>
-  </form>
-  <div>
-    <a href="{% url 'core:borrar-cliente' customer_id=customer_id %}" class='custom-link delete-customer-link'>Borrar cliente</a>
-  </div>
+<h1>Editar un cliente</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class='pico-background-amber-400 no-border'>Editar</button>
+</form>
+<br>
+<form action="{% url 'core:borrar-cliente' customer_id=customer_id %}">
+  <button class="pico-background-red-700 no-border">Borrar cliente</button>
+</form>
 {% endblock content %}

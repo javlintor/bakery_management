@@ -1,21 +1,27 @@
 {% extends "core/_base.html" %} 
 {% block content %}
-<div class='h-flex jc-center'>
-<h2 class='seconday-title'>Pedidos</h2>
-</div>
-<div class="h-flex jc-center">
-    <div class='w-40 date-container'>
-        <a id="left-arrow" href="{% url 'core:pedidos' date=day_before_iso %}"><i class="arrow left"></i></a>
-        <h1 class='w-40'>{{ date_long_str }}</h1>
-        <a id="right-arrow" href="{% url 'core:pedidos' date=day_after_iso %}"><i class="arrow right"></i></a>
-    </div>
-</div>
-<section class="v-flex">
-    {% for order in orders %}
-    <div class='h-flex w-30'>
-        <p>{{ order.name }}</p>
-        <p>{{ order.number }}</p>
-    </div>
-    {% endfor %}
-</section>
+<h1>🥖 Pedidos</h1>
+<p>{{ date_long_str }}</p>
+<form action="{% url 'core:pedidos' %}" class='grid'>
+    <input id='date-input' type="date" name="date" aria-label="Date" value={{ date_iso_str }} onchange="dateFormHandler(event)" style="width: max(20vw, 150px)"/>
+</form>
+<main class='container' style="width: max(60vw, 300px)">
+    <table>
+        <thead>
+          <tr>
+            <th scope="col">Tipo de pan</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+          <tr>
+            <th scope="row">{{ order.name }}</th>
+            <td>{{ order.number }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+</main>
+
 {% endblock content %}
