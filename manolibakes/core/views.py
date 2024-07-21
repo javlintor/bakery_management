@@ -46,18 +46,16 @@ def index(request):
 
 
 @login_required(login_url="members:login")
-def customers(request, date=None):
-    dates = get_dates(date)
+def customers(request):
     customers = Customer.objects.all().order_by("name", "lastname")
-    context = {"customers": customers, **dates}
+    context = {"customers": customers}
     return render(request, "core/customers.html", context)
 
 
 @login_required(login_url="members:login")
-def breads(request, date=None):
-    dates = get_dates(date)
+def breads(request):
     breads = Bread.objects.all()
-    context = {"breads": breads, **dates}
+    context = {"breads": breads}
     return render(request, "core/breads.html", context)
 
 
@@ -83,8 +81,7 @@ def customer(request, customer_id, date=None):
 
 
 @login_required(login_url="members:login")
-def customer_daily_defaults(request, customer_id, date=None):
-    dates = get_dates(date)
+def customer_daily_defaults(request, customer_id):
     if request.method == "POST":
         save_customer_daily_defaults(request, customer_id)
         return HttpResponseRedirect(
@@ -95,7 +92,7 @@ def customer_daily_defaults(request, customer_id, date=None):
         )
     customer = Customer.objects.get(pk=customer_id)
     daily_defaults = get_daily_defaults(customer_id)
-    context = {"customer": customer, "daily_defaults": daily_defaults, **dates}
+    context = {"customer": customer, "daily_defaults": daily_defaults}
     return render(request, "core/customer_daily_defaults.html", context)
 
 
@@ -157,30 +154,38 @@ def delete_customer(request, customer_id: int):
 
 
 @login_required(login_url="members:login")
-def bread(request, bread_id):
-    dates = get_dates()
-    bread = Bread.objects.get(pk=bread_id)
-    context = {"bread": bread, **dates}
-    return render(request, "core/bread.html", context)
-
-
-@login_required(login_url="members:login")
 def create_bread(request):
-    dates = get_dates()
     if request.method == "POST":
         form = BreadForm(
             {field: request.POST.getlist(field)[0] for field in request.POST}
         )
         if form.is_valid():
-            new_bread = form.save()
-            return HttpResponseRedirect(
-                reverse(
-                    "core:bread",
-                    kwargs={
-                        "bread_id": new_bread.id,
-                        "date": None,
-                    },
-                )
-            )
-    context = {**dates, "form": CustomerForm}
+            form.save()
+            return HttpResponseRedirect(reverse("core:panes"))
+    context = {"form": BreadForm}
     return render(request, "core/create_bread.html", context)
+
+
+@login_required(login_url="members:login")
+def bread(request, bread_id: int):
+    bread = Bread.objects.get(pk=bread_id)
+    if request.method == "POST":
+        form = BreadForm(
+            {field: request.POST.getlist(field)[0] for field in request.POST},
+            instance=bread,
+        )
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("core:panes"))
+    context = {
+        "form": BreadForm(instance=bread),
+        "bread": bread,
+    }
+    return render(request, "core/bread.html", context)
+
+
+@login_required(login_url="members:login")
+def delete_bread(request, bread_id: int):
+    bread = Bread.objects.get(pk=bread_id)
+    bread.delete()
+    return HttpResponseRedirect(reverse("core:panes"))

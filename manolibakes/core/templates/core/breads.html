@@ -1,10 +1,14 @@
 {% extends "core/_base.html" %} {% block content %}
-<div >
-<h2 >Panes</h2>
-</div>
-<section >
+<h1>🥖 Panes</h1>
+<form style="display: inline" action="{% url 'core:crear-pan' %}">
+    <button>Añadir nuevo pan</button>
+</form>
+<ul style="margin-top: 2vh">
     {% for bread in breads %}
-    <a href='{% url 'core:pan' bread_id=bread.id %}' >{{ bread }}</a>
+    <li>
+    <a href="{% url 'core:pan' bread_id=bread.id %}" class="bread-list-element underline">{{ bread }}</a>
+    </li>
     {% endfor %}
+</ul>
 </section>
 {% endblock content %}

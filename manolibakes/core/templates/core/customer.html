@@ -12,7 +12,7 @@
     <button class="contrast">Editar datos del cliente</button>
   </form>
 </div>
-<form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST" style="width: max(50vw, 300px)" class='container'>
+<form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST" style="width: max(50vw, 300px)">
   {% csrf_token %}
   <table>
       <thead>
@@ -28,7 +28,9 @@
             <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
           </th>
           <td>
-            <input name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}"/>
+            <fieldset role="group">
+              <input name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}"/>
+            </fieldset>
           </td>
       </tr>
       {% endfor %}

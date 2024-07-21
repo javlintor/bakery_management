@@ -26,8 +26,8 @@
       <a href="/" class="header-element header-title">Manoli Bakes</a>
       <div style="display: flex; gap: 0.5em">
           <a href="{% url 'core:pedidos' %}" class="header-element underline">Pedidos</a>
-          <a href="{% url 'core:clientes' date=date %}" class="header-element underline">Clientes</a>
-          <a href="{% url 'core:panes' date=date %}" class="header-element underline">Panes</a>
+          <a href="{% url 'core:clientes' %}" class="header-element underline">Clientes</a>
+          <a href="{% url 'core:panes' %}" class="header-element underline">Panes</a>
       </div>
       {% if user.is_authenticated %}
         <a href="{% url 'members:logout' %}" class="header-element underline" style="color: #bbb">Logout</a>
@@ -35,11 +35,11 @@
         <a href="{% url 'members:login' %}" class="header-element underline" style="color: #bbb">Login</a>
       {% endif %}
     </header>
-    <div class="container" style="margin-top: 5vh;">
+    <main class="container" style="margin-top: 5vh; width: max(600px, 70vw)">
       {% block content %}
 
       {% endblock %}
-    </div>
+    </main>
   </body>
   <script src="{% static 'core/script.js' %}"></script>
 </html>

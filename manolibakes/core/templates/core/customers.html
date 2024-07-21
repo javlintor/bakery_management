@@ -9,7 +9,7 @@
     <ul style="margin-top: 2vh">
         {% for customer in customers %}
         <li>
-        <a href="{% url 'core:cliente' customer_id=customer.id date=date %}" class="customer-list-element underline">{{ customer }}</a>
+        <a href="{% url 'core:cliente' customer_id=customer.id %}" class="customer-list-element underline">{{ customer }}</a>
         </li>
         {% endfor %}
     </ul>

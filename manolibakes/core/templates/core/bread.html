@@ -1,8 +1,12 @@
 {% extends 'core/_base.html' %} {% block content %}
-  <div >
-    <h2 >{{ bread }}</h2>
-  </div>
-  <div >
-    <a href="/" >Editar tipo de pan</a>
-  </div>
+<h1>{{ bread }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class='pico-background-amber-400 no-border'>Editar</button>
+</form>
+<br>
+<form action="{% url 'core:borrar-pan' bread_id=bread.id %}">
+  <button class="pico-background-red-700 no-border">Borrar pan</button>
+</form>
 {% endblock %}

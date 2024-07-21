@@ -1,27 +1,26 @@
-{% extends "core/_base.html" %} 
+{% extends 'core/_base.html' %}
 {% block content %}
-<h1>🥖 Pedidos</h1>
-<p>{{ date_long_str }}</p>
-<form action="{% url 'core:pedidos' %}" class='grid'>
-    <input id='date-input' type="date" name="date" aria-label="Date" value={{ date_iso_str }} onchange="dateFormHandler(event)" style="width: max(20vw, 150px)"/>
-</form>
-<main class='container' style="width: max(60vw, 300px)">
+  <h1>✍️ Pedidos</h1>
+  <p>{{ date_long_str }}</p>
+  <form action="{% url 'core:pedidos' %}" class='date-picker'>
+    <input id="date-input" type="date" name="date" aria-label="Date" value="{{ date_iso_str }}" onchange="dateFormHandler(event)" />
+  </form>
+  <section style="width: max(60vw, 300px)">
     <table>
-        <thead>
-          <tr>
-            <th scope="col">Tipo de pan</th>
-            <th scope="col">Total</th>
-          </tr>
-        </thead>
-        <tbody>
+      <thead>
+        <tr>
+          <th scope="col">Tipo de pan</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for order in orders %}
           <tr>
             <th scope="row">{{ order.name }}</th>
             <td>{{ order.number }}</td>
           </tr>
         {% endfor %}
-        </tbody>
-      </table>
-</main>
-
-{% endblock content %}
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

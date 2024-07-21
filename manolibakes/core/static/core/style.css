@@ -13,12 +13,13 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 40px;
-    background-color: rgb(23, 21, 36);
-    border-bottom: solid 1px white;
+    /* background-color: rgb(23, 21, 36); */
+    border-bottom: solid 0.5px white;
 }
 
 
-.header-element, .customer-list-element {
+.header-element,
+.customer-list-element, .bread-list-element {
     color: rgb(255, 255, 255);
     text-decoration: inherit;
 }
@@ -42,11 +43,15 @@ body {
     background-color: currentColor;
 }
 
-.no-border { 
+.no-border {
     border: none;
     transition: all 0.3s ease;
 }
 
 .no-border:hover {
     border: solid 1px white;
+}
+
+.date-picker {
+    width: max(20vw, 200px);
 }
