@@ -1,0 +1,12 @@
+{% extends 'core/_base.html' %} {% block content %}
+<h1>Editar un cliente</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class='pico-background-amber-400 no-border'>Editar</button>
+</form>
+<br>
+<form action="{% url 'core:borrar-cliente' customer_id=customer_id %}">
+  <button class="pico-background-red-700 no-border">Borrar cliente</button>
+</form>
+{% endblock content %}

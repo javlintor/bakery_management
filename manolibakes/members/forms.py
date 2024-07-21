@@ -7,6 +7,7 @@ class LogInForm(AuthenticationForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Introduzca nombre de usuario",
+                "class": "form-field"
             }
         )
     )
@@ -14,6 +15,7 @@ class LogInForm(AuthenticationForm):
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Introduzca contraseña",
+                "class": "form-field"
             }
         )
     )

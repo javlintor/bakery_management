@@ -91,6 +91,12 @@ def save_customer_data(request, customer_id, date):
             if order_exists:
                 order.delete()
             continue
+
+        if order_exists:
+            order.number = number
+            order.save()
+            continue
+
         new_order = Order(
             customer_id=customer_id, bread_id=bread_id, date=date, number=number
         )

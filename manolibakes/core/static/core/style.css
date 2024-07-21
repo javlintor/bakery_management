@@ -1,93 +1,31 @@
 body {
-    margin: 0;
+    font-size: min(3vw, 22px);
 }
 
-
-html {
-    font-size: 24px;
-    font-family: "Poppins", sans-serif;
-}
-
-a {
-    color: rgb(82, 92, 36);
-}
-
-.main-block {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    margin: 0 20% 5% 20%;
-}
-
-.mx-8 {
-    margin: 40px 0;
-}
-
-.my-8 {
-    margin: 40px 0;
+.header-title {
+    font-family: 'Young Serif', serif;
+    color: #bccded !important;
+    text-decoration: inherit;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: green;
     padding: 10px 40px;
+    /* background-color: rgb(23, 21, 36); */
+    border-bottom: solid 0.5px white;
 }
 
-.header-title {
-    font-family: 'Young Serif', serif;
-    font-size: 1rem;
-    color: white;
-    text-decoration: inherit;
-}
 
-.header-element {
-    font-size: 0.8rem;
-    color: white;
+.header-element,
+.customer-list-element, .bread-list-element {
+    color: rgb(255, 255, 255);
     text-decoration: inherit;
 }
 
 
-.date-container {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-
-.date-container h1 {
-    font-size: 0.8rem;
-    font-family: 'Noto Sans NKo Unjoined', sans-serif;
-    text-align: center;
-    color: rgb(117, 117, 117);
-}
-
-.seconday-title {
-    font-family: 'Noto Sans NKo Unjoined', sans-serif;
-    color: #007a45;
-    font-size: 2rem;
-    margin: 10px;
-}
-
-.arrow {
-    border: solid black;
-    border-width: 0 0.2rem 0.2rem 0;
-    display: inline-block;
-    padding: 0.2rem;
-}
-
-.right {
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-}
-
-.left {
-    transform: rotate(135deg);
-    -webkit-transform: rotate(135deg);
-}
-
-.underline-hover {
+.underline {
     text-decoration: none;
     /* Ensures the link is not underlined by default */
     position: relative;
@@ -95,128 +33,25 @@ a {
     /* Adjusts the transition speed and type */
 }
 
-.underline-hover:hover::after {
+.underline:hover::after {
     content: '';
     position: absolute;
     width: 100%;
     height: 1px;
-    /* Adjust the thickness of the underline */
     bottom: 0;
     left: 0;
     background-color: currentColor;
-    /* Matches the color of the text */
+}
+
+.no-border {
+    border: none;
     transition: all 0.3s ease;
 }
 
-.h-flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.no-border:hover {
+    border: solid 1px white;
 }
 
-.v-flex {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.jc-center {
-    justify-content: center;
-}
-
-.gap-20 {
-    gap: 20px;
-}
-
-.w-30 {
-    width: 30%;
-}
-
-.w-40 {
-    width: 40%;
-}
-
-.underline-hover::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 1px;
-    /* Adjust the thickness of the underline */
-    bottom: 0;
-    left: 50%;
-    background-color: currentColor;
-    /* Matches the color of the text */
-    transition: all 0.3s ease;
-}
-
-.customer {
-    color: rgb(65, 64, 64);
-    text-decoration: inherit;
-}
-
-.customer:hover {
-    color: rgb(174, 174, 174);
-}
-
-.input {
-    background-color: #636262;
-    font-size: 1rem;
-    color: white;
-    width: 2vw;
-    height: 2vw;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.incremental-button {
-    background-color: aliceblue;
-    color: black;
-    border-radius: 10px;
-    font-size: 2rem;
-    border: 1px solid black;
-    width: 5vw;
-    height: 5vw;
-}
-
-.disable {
-    opacity: 0.1;
-}
-
-.save-button {
-    color: white;
-    background-color: #4CAF50;
-    border-radius: 10px;
-    font-size: 1rem;
-    margin-top: 20px;
-    border: 1px solid black;
-    width: 10vw;
-    height: 4vw;
-}
-
-.save-button:hover {
-    color: white;
-    background-color: #336034;
-}
-
-.cool-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 5px;
-    column-gap: 40px;
-}
-
-.bg-orange {
-    background-color: rgb(176, 121, 19);
-}
-
-@media screen and (max-width: 1200px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    html {
-        font-size: 8px;
-    }
+.date-picker {
+    width: max(20vw, 200px);
 }

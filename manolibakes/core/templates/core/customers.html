@@ -1,10 +1,17 @@
-{% extends "core/_base.html" %} {% block content %}
-<div class='h-flex jc-center'>
-    <h2 class='seconday-title'>Clientes</h2>
-</div>
-<section class='v-flex'>
-    {% for customer in customers %}
-    <a href='{% url 'core:cliente' customer_id=customer.id date=date %}' class='customer'>{{ customer }}</p>
-    {% endfor %}
-</section>
-{% endblock content %}
+{% extends 'core/_base.html' %} {% block content %}
+  <div>
+    <h1>📋 Clientes</h1>
+  </div>
+  <section>
+    <form style="display: inline" action="{% url 'core:crear-cliente' %}">
+      <button>Añadir nuevo cliente</button>
+    </form>
+    <ul style="margin-top: 2vh">
+        {% for customer in customers %}
+        <li>
+        <a href="{% url 'core:cliente' customer_id=customer.id %}" class="customer-list-element underline">{{ customer }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+  </section>
+{% endblock %}
