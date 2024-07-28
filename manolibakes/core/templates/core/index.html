@@ -6,7 +6,7 @@
     <input id="date-input" type="date" name="date" aria-label="Date" value="{{ date_iso_str }}" onchange="dateFormHandler(event)" />
   </form>
   <section style="width: max(60vw, 300px)">
-    <table>
+    <table id='orders-table'>
       <thead>
         <tr>
           <th scope="col">Tipo de pan</th>
@@ -23,4 +23,11 @@
       </tbody>
     </table>
   </section>
+
+<script>
+  {% comment %} const { jsPDF } = require("jspdf")
+  var doc = new jsPDF()
+  doc.autoTable({ html: '#orders-table' })
+  doc.save('table.pdf') {% endcomment %}
+</script>
 {% endblock %}

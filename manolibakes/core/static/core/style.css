@@ -24,6 +24,10 @@ body {
     text-decoration: inherit;
 }
 
+.header-element {
+    font-size: 0.7em;
+}
+
 
 .underline {
     text-decoration: none;
