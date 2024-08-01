@@ -13,7 +13,7 @@ on: [push]
 
 env:
   AWS_REGION: eu-west-1
-  ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+  ECR_REPOSITORY: manolibakes
 
 jobs:
   deploy:
