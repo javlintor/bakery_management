@@ -6,7 +6,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from pydantic import PositiveInt
 import datetime
 
-from core.models import WeeklyDefaults, Order, Customer, Bread, DailyDefaults
+from core.models import Order, Customer, Bread, DailyDefaults
 
 
 class CustomerQueryError(Exception):
@@ -65,11 +65,6 @@ class Command(BaseCommand):
             "If --customer-name is not None and --customer-lastname is, raise an exception",
         )
         parser.add_argument(
-            "--weekday",
-            help="Name of the weekday whose defualt order is going to be computed. "
-            "If None, all weekdays will be computed",
-        )
-        parser.add_argument(
             "--bread",
             help="Name of the bread whose defualt order is going to be computed. "
             "If None, all breads will be computed",
@@ -98,23 +93,7 @@ class Command(BaseCommand):
         for customer, bread, days_future in iterable:
             date = date_from + datetime.timedelta(days=days_future)
             logging.info(f"Inserting orders for date {date}...")
-            weekday = date.weekday()
             number = 0
-            try:
-                weekly_default = WeeklyDefaults.objects.get(
-                    customer=customer, bread=bread, weekday=weekday
-                )
-                number += weekly_default.number
-            except WeeklyDefaults.DoesNotExist:
-                pass
-            try:
-                daily_default = DailyDefaults.objects.get(
-                    customer=customer,
-                    bread=bread,
-                )
-                number += daily_default.number
-            except DailyDefaults.DoesNotExist:
-                pass
             order, _ = Order.objects.get_or_create(
                 customer=customer,
                 bread=bread,
