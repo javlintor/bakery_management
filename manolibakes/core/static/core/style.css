@@ -1,6 +1,3 @@
-body {
-    font-size: min(3vw, 22px);
-}
 
 .header-title {
     font-family: 'Young Serif', serif;
@@ -12,8 +9,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 40px;
-    /* background-color: rgb(23, 21, 36); */
+    padding: 2vw 4vw;
+    gap: 10px;
     border-bottom: solid 0.5px white;
 }
 
@@ -22,15 +19,14 @@ body {
 .customer-list-element, .bread-list-element {
     color: rgb(255, 255, 255);
     text-decoration: inherit;
+    font-size: 0.8rem;
 }
 
 
 .underline {
     text-decoration: none;
-    /* Ensures the link is not underlined by default */
     position: relative;
     transition: all 0.3s ease;
-    /* Adjusts the transition speed and type */
 }
 
 .underline:hover::after {
