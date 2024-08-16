@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<main class='container' style="width: min(90vw, 500px); margin-top: 10vh">
+<main class='container'>
   <form action="{% url 'members:login' %}" method="post">
     {% csrf_token %}
     <h1>Bienvenido</h1>
@@ -22,7 +22,7 @@
       {{ form.non_field_errors }}
     {% endif %}
 
-    <input type="submit" value="Log in" style="min-width: 15vw">
+    <input type="submit" value="Log in">
   </form>
 </main>
 {% endblock %}
