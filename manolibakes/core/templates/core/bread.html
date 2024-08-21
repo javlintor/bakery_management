@@ -1,12 +1,21 @@
 {% extends 'core/_base.html' %} {% block content %}
-<h1>{{ bread }}</h1>
-<form method="post">
+  <h1>{{ bread }}</h1>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button class='pico-background-amber-400 no-border'>Editar</button>
-</form>
-<br>
-<form action="{% url 'core:borrar-pan' bread_id=bread.id %}">
-  <button class="pico-background-red-700 no-border">Borrar pan</button>
-</form>
+    <button class="pico-background-amber-400 no-border">Editar</button>
+  </form>
+  <br />
+  <form action="{% url 'core:borrar-pan' bread_id=bread.id %}">
+    <button class="pico-background-red-700 no-border">Borrar pan</button>
+  </form>
+  <br />
+  <h2>Valores por defecto diarios</h2>
+  <ul>
+    {% for daily_default in daily_defaults %}
+      <li>
+          <a href="{% url 'core:cliente' customer_id=daily_default.customer.id %}">{{ daily_default.customer }}</a> necesita {{ daily_default.number }} todos los días
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

@@ -2,7 +2,7 @@ from .forms import CustomerForm, BreadForm
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
-from .models import Customer, Bread
+from .models import Customer, Bread, DailyDefaults
 from core.services.customer import (
     get_daily_defaults,
     save_customer_daily_defaults,
@@ -158,9 +158,11 @@ def bread(request, bread_id: int):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("core:panes"))
+    daily_defaults = list(DailyDefaults.objects.filter(bread_id=bread_id))
     context = {
         "form": BreadForm(instance=bread),
         "bread": bread,
+        "daily_defaults": daily_defaults
     }
     return render(request, "core/bread.html", context)
 
