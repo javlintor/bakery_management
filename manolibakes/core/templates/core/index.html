@@ -5,7 +5,7 @@
   <form action="{% url 'core:pedidos' %}" class='date-picker'>
     <input id="date-input" type="date" name="date" aria-label="Date" value="{{ date_iso_str }}" onchange="dateFormHandler(event)" />
   </form>
-  <section style="width: max(60vw, 300px)">
+  <section class="bounded-width">
     <table>
       <thead>
         <tr>

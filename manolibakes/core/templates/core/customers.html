@@ -6,12 +6,13 @@
     <form style="display: inline" action="{% url 'core:crear-cliente' %}">
       <button>Añadir nuevo cliente</button>
     </form>
-    <ul style="margin-top: 2vh">
-        {% for customer in customers %}
+    <input type="text" id="customerSearchInput" onkeyup="filterCustomers()" placeholder="filtrar cliente" style='margin-top: 20px'/>
+    <ul style="margin-top: 2vh" id="customers">
+      {% for customer in customers %}
         <li>
-        <a href="{% url 'core:cliente' customer_id=customer.id %}" class="customer-list-element underline">{{ customer }}</a>
+          <a href="{% url 'core:cliente' customer_id=customer.id %}" class="customer-list-element underline">{{ customer }}</a>
         </li>
-        {% endfor %}
+      {% endfor %}
     </ul>
   </section>
 {% endblock %}

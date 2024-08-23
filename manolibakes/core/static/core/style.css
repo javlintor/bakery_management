@@ -22,6 +22,11 @@
     font-size: 0.8rem;
 }
 
+.link {
+    color: white;
+    text-decoration: inherit;
+}
+
 
 .underline {
     text-decoration: none;
@@ -50,4 +55,8 @@
 
 .date-picker {
     width: max(20vw, 200px);
+}
+
+.bounded-width {
+    max-width: 700px;
 }

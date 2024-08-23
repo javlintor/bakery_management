@@ -1,9 +1,9 @@
 {% extends 'core/_base.html' %} {% block content %}
-<h1 >📅 {{ customer }}</h1>
+<h1 >📅 <a href="{% url 'core:cliente' customer_id=customer.id %}" class="underline link">{{ customer }}</a></h1>
 <h2>Valores por defecto diarios</h2>
-<form action="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" method="POST" class="container" style="width: max(60vw, 300px)">
+<form action="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" method="POST" class='bounded-width'>
   {% csrf_token %}
-  <table>
+  <table class='striped'>
       <thead>
         <tr>
           <th scope="col">Tipo de pan</th>

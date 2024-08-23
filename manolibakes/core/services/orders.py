@@ -7,12 +7,13 @@ def get_orders(date: str) -> list[OrderDTO]:
         SELECT
             b.name,
             b.id,
-            COALESCE(COALESCE(o.number, dd.number), 0) AS number
+            SUM(COALESCE(COALESCE(o.number, dd.number), 0)) AS number
         FROM core_bread b
         LEFT OUTER JOIN core_dailydefaults dd
         ON dd.bread_id = b.id
         LEFT OUTER JOIN core_order o
         ON o.bread_id = b.id AND o.date = %s
+        GROUP BY b.id, b.name
         ORDER BY number DESC, name;
     """
     with connection.cursor() as cursor:
