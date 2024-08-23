@@ -11,10 +11,11 @@
   </form>
   <br />
   <h2>Valores por defecto diarios</h2>
+  <span>Se necesita un total de <mark>{{ total }} unidades</mark> todos los días</span>
   <ul>
     {% for daily_default in daily_defaults %}
       <li>
-          <a href="{% url 'core:cliente' customer_id=daily_default.customer.id %}">{{ daily_default.customer }}</a> necesita {{ daily_default.number }} todos los días
+        <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=daily_default.customer.id %}">{{ daily_default.customer }}</a> necesita <strong>{{ daily_default.number }}</strong> todos los días
       </li>
     {% endfor %}
   </ul>

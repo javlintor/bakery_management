@@ -12,7 +12,7 @@
     <button class="contrast">Editar datos del cliente</button>
   </form>
 </div>
-<form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST" style="width: max(50vw, 300px)">
+<form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST" class="bounded-width">
   {% csrf_token %}
   <table>
       <thead>

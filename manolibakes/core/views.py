@@ -35,7 +35,7 @@ def customers(request):
 
 @login_required(login_url="members:login")
 def breads(request):
-    breads = Bread.objects.all()
+    breads = Bread.objects.all().order_by("name")
     context = {"breads": breads}
     return render(request, "core/breads.html", context)
 
@@ -159,9 +159,11 @@ def bread(request, bread_id: int):
             form.save()
             return HttpResponseRedirect(reverse("core:panes"))
     daily_defaults = list(DailyDefaults.objects.filter(bread_id=bread_id))
+    total = sum(daily_default.number for daily_default in daily_defaults)
     context = {
         "form": BreadForm(instance=bread),
         "bread": bread,
+        "total": total,
         "daily_defaults": daily_defaults
     }
     return render(request, "core/bread.html", context)
