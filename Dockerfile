@@ -1,21 +1,17 @@
-# Pull base image
-FROM python:3.12
+FROM python:3.14
 
-ENV POETRY_CACHE_DIR=/tmp/poetry_cache
+ENV UV_SYSTEM_PYTHON=1
 
-# Install dependencies
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 RUN apt-get clean && apt-get update && apt-get install -y locales \
     && sed -i '/es_ES.UTF-8/s/^# //' /etc/locale.gen \
-    && locale-gen \
-    && pip3 install --upgrade --no-cache-dir pip \
-    && pip3 install --no-cache-dir poetry
+    && locale-gen
 
-COPY pyproject.toml poetry.lock /app/
-RUN cd /app \
-    && POETRY_VIRTUALENVS_CREATE=false poetry install --no-root\
-    && rm -rf $POETRY_CACHE_DIR
+COPY pyproject.toml uv.lock /app/
+RUN cd /app && uv sync --frozen --no-install-project
 
-RUN mkdir /app/manolibakes /app/data
+RUN mkdir -p /app/manolibakes /app/data
 
 COPY manolibakes /app/manolibakes
 
@@ -23,4 +19,4 @@ WORKDIR /app
 
 EXPOSE 8000
 
-ENTRYPOINT [ "python3", "/app/manolibakes/manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["python3", "/app/manolibakes/manage.py", "runserver", "0.0.0.0:8000"]
