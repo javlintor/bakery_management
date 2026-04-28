@@ -8,7 +8,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         new_customers = [
-            Customer(name="Javier", lastname="Olarte"),
             Customer(name="Javier", lastname="Linares"),
             Customer(name="Domingo", lastname="Palomar"),
             Customer(name="Claudia", lastname="Palomar"),

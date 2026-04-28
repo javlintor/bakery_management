@@ -1,10 +1,22 @@
 import datetime
 
+from django.http import QueryDict
 
-def get_post_data(request):
-    data = str(request.body).replace("'", "").split("&")[1:]
-    data = [d.split("=") for d in data]
-    return data
+_CSRF_TOKEN_KEY = "csrfmiddlewaretoken"
+
+
+def extract_bread_quantities(post_data: QueryDict) -> list[tuple[int, int]]:
+    result = []
+    for key, value in post_data.items():
+        if key == _CSRF_TOKEN_KEY:
+            continue
+        try:
+            bread_id = int(key)
+            quantity = int(value)
+        except ValueError as error:
+            raise ValueError(f"Invalid POST data: key={key}, value={value}") from error
+        result.append((bread_id, quantity))
+    return result
 
 
 def get_dates(date_str: str | None = None) -> dict:

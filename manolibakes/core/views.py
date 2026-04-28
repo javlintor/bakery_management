@@ -1,5 +1,6 @@
 from .forms import CustomerForm, BreadForm
-from django.shortcuts import render
+from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from .models import Customer, Bread, DailyDefaults
@@ -43,7 +44,10 @@ def breads(request):
 @login_required(login_url="members:login")
 def customer(request, customer_id, date=None):
     if request.method == "POST":
-        save_customer_data(request, customer_id, date=date)
+        try:
+            save_customer_data(request=request, customer_id=customer_id, date=date)
+        except ValueError:
+            return HttpResponseBadRequest()
         return HttpResponseRedirect(
             reverse(
                 "core:cliente",
@@ -56,7 +60,7 @@ def customer(request, customer_id, date=None):
     date = request.GET.get("date")
     dates = get_dates(date)
     orders = get_customer_final_orders(customer_id, dates["date"])
-    _customer = Customer.objects.get(pk=customer_id)
+    _customer = get_object_or_404(Customer, pk=customer_id)
     context = {"customer": _customer, "orders": orders, **dates}
     return render(request, "core/customer.html", context)
 
@@ -64,14 +68,17 @@ def customer(request, customer_id, date=None):
 @login_required(login_url="members:login")
 def customer_daily_defaults(request, customer_id):
     if request.method == "POST":
-        save_customer_daily_defaults(request, customer_id)
+        try:
+            save_customer_daily_defaults(request=request, customer_id=customer_id)
+        except ValueError:
+            return HttpResponseBadRequest()
         return HttpResponseRedirect(
             reverse(
                 "core:cliente_valores_defecto_diarios",
                 kwargs={"customer_id": customer_id},
             )
         )
-    customer = Customer.objects.get(pk=customer_id)
+    customer = get_object_or_404(Customer, pk=customer_id)
     daily_defaults = get_daily_defaults(customer_id)
     context = {"customer": customer, "daily_defaults": daily_defaults}
     return render(request, "core/customer_daily_defaults.html", context)
@@ -102,7 +109,7 @@ def create_customer(request, date=None):
 @login_required(login_url="members:login")
 def edit_customer(request, customer_id: int, date=None):
     dates = get_dates(date)
-    customer = Customer.objects.get(pk=customer_id)
+    customer = get_object_or_404(Customer, pk=customer_id)
     if request.method == "POST":
         form = CustomerForm(
             {field: request.POST.getlist(field)[0] for field in request.POST},
@@ -129,7 +136,7 @@ def edit_customer(request, customer_id: int, date=None):
 
 @login_required(login_url="members:login")
 def delete_customer(request, customer_id: int):
-    customer = Customer.objects.get(pk=customer_id)
+    customer = get_object_or_404(Customer, pk=customer_id)
     customer.delete()
     return HttpResponseRedirect(reverse("core:clientes", kwargs={"date": None}))
 
@@ -149,7 +156,7 @@ def create_bread(request):
 
 @login_required(login_url="members:login")
 def bread(request, bread_id: int):
-    bread = Bread.objects.get(pk=bread_id)
+    bread = get_object_or_404(Bread, pk=bread_id)
     if request.method == "POST":
         form = BreadForm(
             {field: request.POST.getlist(field)[0] for field in request.POST},
@@ -171,6 +178,6 @@ def bread(request, bread_id: int):
 
 @login_required(login_url="members:login")
 def delete_bread(request, bread_id: int):
-    bread = Bread.objects.get(pk=bread_id)
+    bread = get_object_or_404(Bread, pk=bread_id)
     bread.delete()
     return HttpResponseRedirect(reverse("core:panes"))

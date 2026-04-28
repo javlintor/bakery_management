@@ -1,35 +1,56 @@
-from django.db import connection
-from core.utils import get_post_data
-from typing import Iterable
-from core.models import DailyDefaults, Order
-from core.dto import OrderDTO
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import IntegerField, OuterRef, Subquery, Value
+from django.db.models.functions import Coalesce
+from django.http import HttpRequest
+
+from core.dto import OrderDTO
+from core.models import Bread, DailyDefaults, Order
+from core.utils import extract_bread_quantities
 
 
 def get_customer_final_orders(customer_id: int, date: str) -> list[OrderDTO]:
-    query = """
-        SELECT
-            b.name,
-            b.id,
-            COALESCE(COALESCE(o.number, dd.number), 0) AS number
-        FROM core_bread b
-        LEFT OUTER JOIN core_dailydefaults dd
-        ON dd.bread_id = b.id AND dd.customer_id = %s
-        LEFT OUTER JOIN core_order o
-        ON o.bread_id = b.id AND o.customer_id = %s AND o.date = %s
-        ORDER BY number DESC, name;
-    """
-    with connection.cursor() as cursor:
-        cursor.execute(query, [customer_id, customer_id, date])
-        orders = cursor.fetchall()
-    orders = [OrderDTO(name=order[0], id=order[1], number=order[2]) for order in orders]
-    return orders
+    order_number_subquery = Subquery(
+        Order.objects.filter(
+            bread=OuterRef("pk"),
+            customer_id=customer_id,
+            date=date,
+        ).values("number")[:1]
+    )
+    daily_default_number_subquery = Subquery(
+        DailyDefaults.objects.filter(
+            bread=OuterRef("pk"),
+            customer_id=customer_id,
+        ).values("number")[:1]
+    )
+    number_annotation = Coalesce(
+        order_number_subquery,
+        daily_default_number_subquery,
+        Value(0),
+        output_field=IntegerField(),
+    )
+    breads = Bread.objects.annotate(number=number_annotation).order_by("-number", "name")
+    return [OrderDTO(name=bread.name, id=bread.id, number=bread.number) for bread in breads]
 
 
-def save_customer_daily_defaults(request, customer_id):
-    data = get_post_data(request)
+def get_daily_defaults(customer_id: int) -> list[OrderDTO]:
+    daily_default_number_subquery = Subquery(
+        DailyDefaults.objects.filter(
+            bread=OuterRef("pk"),
+            customer_id=customer_id,
+        ).values("number")[:1]
+    )
+    number_annotation = Coalesce(
+        daily_default_number_subquery,
+        Value(0),
+        output_field=IntegerField(),
+    )
+    breads = Bread.objects.annotate(number=number_annotation).order_by("-number")
+    return [OrderDTO(name=bread.name, id=bread.id, number=bread.number) for bread in breads]
+
+
+def save_customer_daily_defaults(request: HttpRequest, customer_id: int) -> None:
+    data = extract_bread_quantities(post_data=request.POST)
     for bread_id, number in data:
-        number = int(number)
         try:
             daily_default = DailyDefaults.objects.get(
                 customer_id=customer_id, bread_id=bread_id
@@ -47,27 +68,9 @@ def save_customer_daily_defaults(request, customer_id):
         daily_default.save()
 
 
-def get_daily_defaults(customer_id) -> Iterable[OrderDTO]:
-    query = """
-        SELECT b.name, b.id, COALESCE(dd.number, 0) AS number FROM core_bread b
-        LEFT OUTER JOIN core_dailydefaults dd
-        ON dd.bread_id = b.id AND dd.customer_id = %s
-        ORDER BY number DESC
-    """
-    with connection.cursor() as cursor:
-        cursor.execute(query, [customer_id])
-        daily_defaults = cursor.fetchall()
-    daily_defaults = [
-        OrderDTO(name=daily_default[0], id=daily_default[1], number=daily_default[2])
-        for daily_default in daily_defaults
-    ]
-    return daily_defaults
-
-
-def save_customer_data(request, customer_id, date):
-    data = get_post_data(request)
+def save_customer_data(request: HttpRequest, customer_id: int, date: str | None) -> None:
+    data = extract_bread_quantities(post_data=request.POST)
     for bread_id, number in data:
-        number = int(number)
         order_exists = True
         try:
             order = Order.objects.get(
