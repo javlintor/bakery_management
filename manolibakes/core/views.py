@@ -165,7 +165,7 @@ def bread(request, bread_id: int):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("core:panes"))
-    daily_defaults = list(DailyDefaults.objects.filter(bread_id=bread_id))
+    daily_defaults = list(DailyDefaults.objects.select_related("customer").filter(bread_id=bread_id))
     total = sum(daily_default.number for daily_default in daily_defaults)
     context = {
         "form": BreadForm(instance=bread),
