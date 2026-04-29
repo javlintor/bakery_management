@@ -1,6 +1,7 @@
 import datetime
 
 from django.http import QueryDict
+from django.utils.formats import date_format
 
 _CSRF_TOKEN_KEY = "csrfmiddlewaretoken"
 
@@ -27,7 +28,8 @@ def get_dates(date_str: str | None = None) -> dict:
             date = datetime.date.fromisoformat(date_str)
         except ValueError:
             date = datetime.date.today() + datetime.timedelta(days=1)
-    date_long_str = date.strftime("%A, %d de %B de %Y")
+    date_format_str = r"l, j \d\e F \d\e Y"
+    date_long_str = date_format(value=date, format=date_format_str)
     date_iso_str = date.strftime("%Y-%m-%d")
     return {
         "date": date,

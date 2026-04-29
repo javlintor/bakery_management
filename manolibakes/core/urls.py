@@ -1,11 +1,11 @@
 from django.urls import path
+from django.views.generic import RedirectView
 
 from . import views
 
-
 app_name = "core"
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", RedirectView.as_view(pattern_name="core:pedidos"), name="index"),
     path("pedidos/", views.index, name="pedidos"),
     path("clientes/", views.customers, name="clientes"),
     path("clientes/<str:date>", views.customers, name="clientes"),
@@ -22,5 +22,7 @@ urlpatterns = [
     ),
     path("cliente/create", views.create_customer, name="crear-cliente"),
     path("cliente/edit/<int:customer_id>", views.edit_customer, name="editar-cliente"),
-    path("cliente/delete/<int:customer_id>", views.delete_customer, name="borrar-cliente"),
+    path(
+        "cliente/delete/<int:customer_id>", views.delete_customer, name="borrar-cliente"
+    ),
 ]

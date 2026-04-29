@@ -20,4 +20,5 @@ package = false
 [dependency-groups]
 dev = [
     "django-stubs>=5.0",
+    "ruff>=0.15.12",
 ]

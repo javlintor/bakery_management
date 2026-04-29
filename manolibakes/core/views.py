@@ -1,21 +1,19 @@
-from .forms import CustomerForm, BreadForm
-from django.http import HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
-from .models import Customer, Bread, DailyDefaults
+
 from core.services.customer import (
+    get_customer_final_orders,
     get_daily_defaults,
     save_customer_daily_defaults,
-    get_customer_final_orders,
     save_customer_data,
 )
 from core.services.orders import get_orders
-import locale
-from django.contrib.auth.decorators import login_required
-from .utils import get_dates
 
-locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
+from .forms import BreadForm, CustomerForm
+from .models import Bread, Customer, DailyDefaults
+from .utils import get_dates
 
 
 @login_required(login_url="members:login")
@@ -165,13 +163,15 @@ def bread(request, bread_id: int):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("core:panes"))
-    daily_defaults = list(DailyDefaults.objects.select_related("customer").filter(bread_id=bread_id))
+    daily_defaults = list(
+        DailyDefaults.objects.select_related("customer").filter(bread_id=bread_id)
+    )
     total = sum(daily_default.number for daily_default in daily_defaults)
     context = {
         "form": BreadForm(instance=bread),
         "bread": bread,
         "total": total,
-        "daily_defaults": daily_defaults
+        "daily_defaults": daily_defaults,
     }
     return render(request, "core/bread.html", context)
 
