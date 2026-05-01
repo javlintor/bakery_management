@@ -1,7 +1,10 @@
 import datetime
+from typing import TYPE_CHECKING
 
-from django.http import QueryDict
 from django.utils.formats import date_format
+
+if TYPE_CHECKING:
+    from django.http import QueryDict
 
 _CSRF_TOKEN_KEY = "csrfmiddlewaretoken"
 
@@ -20,7 +23,7 @@ def extract_bread_quantities(post_data: QueryDict) -> list[tuple[int, int]]:
     return result
 
 
-def get_dates(date_str: str | None = None) -> dict:
+def get_dates(date_str: str | None = None) -> dict[str, datetime.date | str]:
     if date_str is None:
         date = datetime.date.today() + datetime.timedelta(days=1)
     else:

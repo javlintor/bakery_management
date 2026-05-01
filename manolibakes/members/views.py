@@ -1,10 +1,15 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
+from typing import TYPE_CHECKING
+
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect, render
+
 from .forms import LogInForm
 
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
 
-def login_user(request):
+
+def login_user(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -15,6 +20,6 @@ def login_user(request):
     return render(request, "authenticate/login.html", {"date": None, "form": LogInForm})
 
 
-def logout_user(request):
+def logout_user(request: HttpRequest) -> HttpResponse:
     logout(request)
     return redirect("members:login")

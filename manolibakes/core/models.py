@@ -3,24 +3,28 @@ from django.db import models
 
 class Customer(models.Model):
     name = models.CharField(max_length=200)
-    lastname = models.CharField(max_length=200, null=True)
-
-    def __str__(self):
-        return f"{self.name} {self.lastname}"
+    lastname = models.CharField(max_length=200, default="")
 
     class Meta:
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=["name", "lastname"], name="unique-name-lastname"
-            )
-        ]
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.lastname}"
 
 
 class Bread(models.Model):
     name = models.CharField(max_length=200)
 
-    def __str__(self):
-        return f"{self.name}"
+    class Meta:
+        verbose_name = "bread"
+        verbose_name_plural = "breads"
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class WeeklyDefaults(models.Model):
@@ -38,18 +42,18 @@ class WeeklyDefaults(models.Model):
     weekday = models.PositiveIntegerField(choices=Weekday.choices)
     number = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=["customer", "bread", "weekday"], name="unique-weekly-default"
+            ),
+        )
+
+    def __str__(self) -> str:
         return (
             f"{self.customer} necesita {self.number} {self.bread} "
             f"el {self.Weekday(self.weekday).label}"
         )
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["customer", "bread", "weekday"], name="unique-weekly-default"
-            )
-        ]
 
 
 class DailyDefaults(models.Model):
@@ -57,17 +61,15 @@ class DailyDefaults(models.Model):
     bread = models.ForeignKey(Bread, on_delete=models.CASCADE)
     number = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
-        return (
-            f"{self.customer} necesita {self.number} {self.bread} todos los dias"
-        )
-
     class Meta:
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=["customer", "bread"], name="unique-daily-default"
-            )
-        ]
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f"{self.customer} necesita {self.number} {self.bread} todos los dias"
 
 
 class Order(models.Model):
@@ -76,12 +78,12 @@ class Order(models.Model):
     date = models.DateField()
     number = models.PositiveIntegerField(default=0, null=True)
 
-    def __str__(self):
-        return f"{self.customer} necesita {self.number} {self.bread} el {self.date}"
-
     class Meta:
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=["customer", "bread", "date"], name="unique-order"
-            )
-        ]
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f"{self.customer} necesita {self.number} {self.bread} el {self.date}"

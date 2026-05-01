@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -15,9 +17,12 @@ from .forms import BreadForm, CustomerForm
 from .models import Bread, Customer, DailyDefaults
 from .utils import get_dates
 
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
+
 
 @login_required(login_url="members:login")
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     date = request.GET.get("date")
     dates = get_dates(date)
     orders = get_orders(dates["date"])
@@ -26,21 +31,21 @@ def index(request):
 
 
 @login_required(login_url="members:login")
-def customers(request):
+def customers(request: HttpRequest) -> HttpResponse:
     customers = Customer.objects.all().order_by("name", "lastname")
     context = {"customers": customers}
     return render(request, "core/customers.html", context)
 
 
 @login_required(login_url="members:login")
-def breads(request):
+def breads(request: HttpRequest) -> HttpResponse:
     breads = Bread.objects.all().order_by("name")
     context = {"breads": breads}
     return render(request, "core/breads.html", context)
 
 
 @login_required(login_url="members:login")
-def customer(request, customer_id, date=None):
+def customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
     if request.method == "POST":
         try:
             save_customer_data(request=request, customer_id=customer_id, date=date)
@@ -64,7 +69,7 @@ def customer(request, customer_id, date=None):
 
 
 @login_required(login_url="members:login")
-def customer_daily_defaults(request, customer_id):
+def customer_daily_defaults(request: HttpRequest, customer_id: int) -> HttpResponse:
     if request.method == "POST":
         try:
             save_customer_daily_defaults(request=request, customer_id=customer_id)
@@ -83,7 +88,7 @@ def customer_daily_defaults(request, customer_id):
 
 
 @login_required(login_url="members:login")
-def create_customer(request, date=None):
+def create_customer(request: HttpRequest, date: str | None = None) -> HttpResponse:
     dates = get_dates(date)
     if request.method == "POST":
         form = CustomerForm(
@@ -105,7 +110,7 @@ def create_customer(request, date=None):
 
 
 @login_required(login_url="members:login")
-def edit_customer(request, customer_id: int, date=None):
+def edit_customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
     dates = get_dates(date)
     customer = get_object_or_404(Customer, pk=customer_id)
     if request.method == "POST":
@@ -133,14 +138,14 @@ def edit_customer(request, customer_id: int, date=None):
 
 
 @login_required(login_url="members:login")
-def delete_customer(request, customer_id: int):
+def delete_customer(request: HttpRequest, customer_id: int) -> HttpResponse:
     customer = get_object_or_404(Customer, pk=customer_id)
     customer.delete()
     return HttpResponseRedirect(reverse("core:clientes", kwargs={"date": None}))
 
 
 @login_required(login_url="members:login")
-def create_bread(request):
+def create_bread(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = BreadForm(
             {field: request.POST.getlist(field)[0] for field in request.POST}
@@ -153,7 +158,7 @@ def create_bread(request):
 
 
 @login_required(login_url="members:login")
-def bread(request, bread_id: int):
+def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread = get_object_or_404(Bread, pk=bread_id)
     if request.method == "POST":
         form = BreadForm(
@@ -177,7 +182,7 @@ def bread(request, bread_id: int):
 
 
 @login_required(login_url="members:login")
-def delete_bread(request, bread_id: int):
+def delete_bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread = get_object_or_404(Bread, pk=bread_id)
     bread.delete()
     return HttpResponseRedirect(reverse("core:panes"))
