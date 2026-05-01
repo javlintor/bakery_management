@@ -15,7 +15,7 @@ from core.services.orders import get_orders
 
 from .forms import BreadForm, CustomerForm
 from .models import Bread, Customer, DailyDefaults
-from .utils import get_dates
+from .utils import DateResolver
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -24,9 +24,15 @@ if TYPE_CHECKING:
 @login_required(login_url="members:login")
 def index(request: HttpRequest) -> HttpResponse:
     date = request.GET.get("date")
-    dates = get_dates(date)
-    orders = get_orders(dates["date"])
-    context = {"orders": orders, **dates}
+    date_resolver = DateResolver(date_str=date)
+    resolved_date = date_resolver.date
+    orders = get_orders(date=resolved_date)
+    context = {
+        "orders": orders,
+        "date": resolved_date,
+        "date_iso_str": date_resolver.date_iso_str,
+        "date_long_str": date_resolver.date_long_str,
+    }
     return render(request, "core/index.html", context)
 
 
@@ -61,10 +67,17 @@ def customer(request: HttpRequest, customer_id: int, date: str | None = None) ->
             )
         )
     date = request.GET.get("date")
-    dates = get_dates(date)
-    orders = get_customer_final_orders(customer_id, dates["date"])
+    date_resolver = DateResolver(date_str=date)
+    resolved_date = date_resolver.date
+    orders = get_customer_final_orders(customer_id=customer_id, date=resolved_date)
     _customer = get_object_or_404(Customer, pk=customer_id)
-    context = {"customer": _customer, "orders": orders, **dates}
+    context = {
+        "customer": _customer,
+        "orders": orders,
+        "date": resolved_date,
+        "date_iso_str": date_resolver.date_iso_str,
+        "date_long_str": date_resolver.date_long_str,
+    }
     return render(request, "core/customer.html", context)
 
 
@@ -89,29 +102,28 @@ def customer_daily_defaults(request: HttpRequest, customer_id: int) -> HttpRespo
 
 @login_required(login_url="members:login")
 def create_customer(request: HttpRequest, date: str | None = None) -> HttpResponse:
-    dates = get_dates(date)
-    if request.method == "POST":
-        form = CustomerForm(
-            {field: request.POST.getlist(field)[0] for field in request.POST}
+    date_resolver = DateResolver(date_str=date)
+    post_data = request.POST if request.method == "POST" else None
+    form = CustomerForm(data=post_data)
+    if request.method == "POST" and form.is_valid():
+        new_customer = form.save()
+        customer_url = reverse(
+            viewname="core:cliente",
+            kwargs={"customer_id": new_customer.id, "date": date},
         )
-        if form.is_valid():
-            new_customer = form.save()
-            return HttpResponseRedirect(
-                reverse(
-                    "core:cliente",
-                    kwargs={
-                        "customer_id": new_customer.id,
-                        "date": date,
-                    },
-                )
-            )
-    context = {**dates, "form": CustomerForm}
-    return render(request, "core/create_customer.html", context)
+        return HttpResponseRedirect(customer_url)
+    context = {
+        "date": date_resolver.date,
+        "date_iso_str": date_resolver.date_iso_str,
+        "date_long_str": date_resolver.date_long_str,
+        "form": form,
+    }
+    return render(request=request, template_name="core/create_customer.html", context=context)
 
 
 @login_required(login_url="members:login")
 def edit_customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
-    dates = get_dates(date)
+    date_resolver = DateResolver(date_str=date)
     customer = get_object_or_404(Customer, pk=customer_id)
     if request.method == "POST":
         form = CustomerForm(
@@ -130,7 +142,9 @@ def edit_customer(request: HttpRequest, customer_id: int, date: str | None = Non
                 )
             )
     context = {
-        **dates,
+        "date": date_resolver.date,
+        "date_iso_str": date_resolver.date_iso_str,
+        "date_long_str": date_resolver.date_long_str,
         "form": CustomerForm(instance=customer),
         "customer_id": customer.id,
     }

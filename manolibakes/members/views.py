@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
 
 from .forms import LogInForm
@@ -10,16 +10,20 @@ if TYPE_CHECKING:
 
 
 def login_user(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("core:index")
-    return render(request, "authenticate/login.html", {"date": None, "form": LogInForm})
+    post_data = request.POST if request.method == "POST" else None
+    form = LogInForm(request=request, data=post_data)
+    if request.method == "POST" and form.is_valid():
+        user = form.get_user()
+        login(request=request, user=user)
+        return redirect(to="core:index")
+    return render(
+        request=request,
+        template_name="authenticate/login.html",
+        context={"date": None, "form": form},
+    )
 
 
 def logout_user(request: HttpRequest) -> HttpResponse:
-    logout(request)
-    return redirect("members:login")
+    logout(request=request)
+    return redirect(to="members:login")
+
