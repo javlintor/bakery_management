@@ -27,34 +27,6 @@ class Bread(models.Model):
         return self.name
 
 
-class WeeklyDefaults(models.Model):
-    class Weekday(models.IntegerChoices):
-        L = (0, "lunes")
-        M = (1, "martes")
-        X = (2, "miércoles")
-        J = (3, "jueves")
-        V = (4, "viernes")
-        S = (5, "sábado")
-        D = (6, "domingo")
-
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    bread = models.ForeignKey(Bread, on_delete=models.CASCADE)
-    weekday = models.PositiveIntegerField(choices=Weekday.choices)
-    number = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        constraints = (
-            models.UniqueConstraint(
-                fields=["customer", "bread", "weekday"], name="unique-weekly-default"
-            ),
-        )
-
-    def __str__(self) -> str:
-        return (
-            f"{self.customer} necesita {self.number} {self.bread} "
-            f"el {self.Weekday(self.weekday).label}"
-        )
-
 
 class DailyDefaults(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
