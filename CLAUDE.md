@@ -6,42 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Manoli Bakes** is a Django 5 application for managing bakery orders. Customers place orders for specific bread types on given dates. The app tracks recurring defaults and per-day overrides.
 
-## Commands
-
-All Django commands run from the `manolibakes/` subdirectory (where `manage.py` lives):
-
-```bash
-cd manolibakes
-
-# Run development server
-uv run python manage.py runserver
-
-# Apply migrations
-uv run python manage.py migrate
-
-# Create migrations after model changes
-uv run python manage.py makemigrations
-
-# Run tests
-uv run python manage.py test
-
-# Run a single test module
-uv run python manage.py test core.tests
-
-# Open Django shell
-uv run python manage.py shell
-```
-
-Install / sync dependencies (from repo root):
-```bash
-uv sync
-```
-
-Docker (runs app + PostgreSQL):
-```bash
-docker-compose up
-```
-
 ## Architecture
 
 ### Django Apps
@@ -85,7 +49,6 @@ Orders for a customer+bread+date are resolved with this priority:
 - **`Bread`** — `name`.
 - **`Order`** — `customer`, `bread`, `date`, `number` (unique on customer+bread+date).
 - **`DailyDefaults`** — `customer`, `bread`, `number` (unique on customer+bread). Acts as a standing order.
-- **`WeeklyDefaults`** — `customer`, `bread`, `weekday`, `number`. Defined but not actively used in views.
 
 ### Database
 
@@ -95,3 +58,7 @@ Orders for a customer+bread+date are resolved with this priority:
 ### Authentication
 
 Session-based auth using Django's built-in system. Cookie timeout: 1 hour (`SESSION_COOKIE_AGE = 3600`). All core views require login.
+
+## UI
+
+Always use DESIGN.md for UI work.
