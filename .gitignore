@@ -10,3 +10,5 @@ stacks
 /data
 node_modules
 
+# AI agents
+DESIGN.md
