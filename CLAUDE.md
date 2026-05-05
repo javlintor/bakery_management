@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Manoli Bakes** is a Django 5 application for managing bakery orders. Customers place orders for specific bread types on given dates. The app tracks recurring defaults and per-day overrides.
+**Manoli Bakes** is a Django 6 application for managing bakery orders. Customers place orders for specific bread types on given dates. The app tracks recurring defaults and per-day overrides.
 
 ## Architecture
 
@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 URL (urls.py) → View (views.py) → Service (services/) → Model or raw SQL → Template
 ```
 
-Views are all function-based and protected with `@login_required`.
+Views are all function-based. All views require login via `LoginRequiredMiddleware`; the members login/logout views use `@login_not_required`.
 
 ### Service Layer
 
