@@ -55,7 +55,7 @@ def get_daily_defaults(customer_id: int) -> list[OrderDTO]:
         Value(0),
         output_field=IntegerField(),
     )
-    breads = Bread.objects.annotate(number=number_annotation).order_by("-number")
+    breads = Bread.objects.annotate(number=number_annotation).order_by("name")
     return [
         OrderDTO(name=bread.name, id=bread.id, number=bread.number) for bread in breads
     ]
