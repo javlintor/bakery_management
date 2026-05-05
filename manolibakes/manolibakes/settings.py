@@ -47,6 +47,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -72,6 +73,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "manolibakes.wsgi.application"
 
 SESSION_COOKIE_AGE = 60 * 60
+
+LOGIN_URL = "members:login"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

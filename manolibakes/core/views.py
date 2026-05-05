@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -22,7 +21,6 @@ if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 
-@login_required(login_url="members:login")
 def index(request: HttpRequest) -> HttpResponse:
     date = request.GET.get("date")
     date_resolver = DateResolver(date_str=date)
@@ -37,21 +35,18 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, "core/index.html", context)
 
 
-@login_required(login_url="members:login")
 def customers(request: HttpRequest) -> HttpResponse:
     customers = Customer.objects.all().order_by("name", "lastname")
     context = {"customers": customers}
     return render(request, "core/customers.html", context)
 
 
-@login_required(login_url="members:login")
 def breads(request: HttpRequest) -> HttpResponse:
     breads = Bread.objects.all().order_by("name")
     context = {"breads": breads}
     return render(request, "core/breads.html", context)
 
 
-@login_required(login_url="members:login")
 def customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
     if request.method == "POST":
         try:
@@ -83,7 +78,6 @@ def customer(request: HttpRequest, customer_id: int, date: str | None = None) ->
     return render(request, "core/customer.html", context)
 
 
-@login_required(login_url="members:login")
 def customer_daily_defaults(request: HttpRequest, customer_id: int) -> HttpResponse:
     if request.method == "POST":
         try:
@@ -103,7 +97,6 @@ def customer_daily_defaults(request: HttpRequest, customer_id: int) -> HttpRespo
     return render(request, "core/customer_daily_defaults.html", context)
 
 
-@login_required(login_url="members:login")
 def create_customer(request: HttpRequest, date: str | None = None) -> HttpResponse:
     date_resolver = DateResolver(date_str=date)
     post_data = request.POST if request.method == "POST" else None
@@ -125,7 +118,6 @@ def create_customer(request: HttpRequest, date: str | None = None) -> HttpRespon
     return render(request=request, template_name="core/create_customer.html", context=context)
 
 
-@login_required(login_url="members:login")
 def edit_customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
     date_resolver = DateResolver(date_str=date)
     customer = get_object_or_404(Customer, pk=customer_id)
@@ -157,7 +149,6 @@ def edit_customer(request: HttpRequest, customer_id: int, date: str | None = Non
 
 
 
-@login_required(login_url="members:login")
 def create_bread(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = BreadForm(
@@ -171,7 +162,6 @@ def create_bread(request: HttpRequest) -> HttpResponse:
     return render(request, "core/create_bread.html", context)
 
 
-@login_required(login_url="members:login")
 def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread = get_object_or_404(Bread, pk=bread_id)
     if request.method == "POST":
@@ -196,7 +186,6 @@ def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     return render(request, "core/bread.html", context)
 
 
-@login_required(login_url="members:login")
 def delete_bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread = get_object_or_404(Bread, pk=bread_id)
     bread.delete()
