@@ -200,4 +200,5 @@ def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
 def delete_bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread = get_object_or_404(Bread, pk=bread_id)
     bread.delete()
+    messages.success(request=request, message="Pan eliminado")
     return HttpResponseRedirect(reverse("core:panes"))
