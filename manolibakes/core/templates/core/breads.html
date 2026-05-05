@@ -1,15 +1,14 @@
-{% extends "core/_base.html" %} {% block content %}
-<h1>🥖 Panes</h1>
-<form style="display: inline" action="{% url 'core:crear-pan' %}">
-    <button>Añadir nuevo pan</button>
-</form>
-<input type="text" id="breadSearchInput" onkeyup="filterBreads()" placeholder="filtrar pan" style='margin-top: 20px'/>
-<ul style="margin-top: 2vh" id="breads">
+{% extends 'core/_base.html' %}
+{% block content %}
+  <h1>Panes</h1>
+  <div class="page-actions" style="margin-top: 24px;">
+    <a href="{% url 'core:crear-pan' %}" class="btn">Añadir nuevo pan</a>
+  </div>
+  <ul class="item-list">
     {% for bread in breads %}
-    <li>
-    <a href="{% url 'core:pan' bread_id=bread.id %}" class="bread-list-element underline">{{ bread }}</a>
-    </li>
+      <li>
+        <a href="{% url 'core:pan' bread_id=bread.id %}">{{ bread }}</a>
+      </li>
     {% endfor %}
-</ul>
-</section>
-{% endblock content %}
+  </ul>
+{% endblock %}

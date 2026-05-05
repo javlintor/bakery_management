@@ -1,21 +1,35 @@
-{% extends 'core/_base.html' %} {% block content %}
+{% extends 'core/_base.html' %}
+{% block content %}
   <h1>{{ bread }}</h1>
-  <form method="post">
+  <form method="post" style="max-width: 400px; margin-top: 24px;">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button class="pico-background-amber-400 no-border">Editar</button>
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <ul class="form-errors">
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-edit">Editar</button>
   </form>
-  <br />
+  <hr class="divider" />
   <form action="{% url 'core:borrar-pan' bread_id=bread.id %}">
-    <button class="pico-background-red-700 no-border">Borrar pan</button>
+    <button type="submit" class="btn btn-danger">Borrar pan</button>
   </form>
-  <br />
+  <hr class="divider" />
   <h2>Valores por defecto diarios</h2>
-  <span>Se necesita un total de <mark>{{ total }} unidades</mark> todos los días</span>
-  <ul>
+  <p class="caption">Total diario: <mark>{{ total }} unidades</mark></p>
+  <ul class="item-list">
     {% for daily_default in daily_defaults %}
       <li>
-        <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=daily_default.customer.id %}">{{ daily_default.customer }}</a> necesita <strong>{{ daily_default.number }}</strong> todos los días
+        <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=daily_default.customer.id %}">{{ daily_default.customer }}</a>
+        <span style="color: var(--text-secondary);"> — {{ daily_default.number }} unidades</span>
       </li>
     {% endfor %}
   </ul>

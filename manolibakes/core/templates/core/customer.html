@@ -1,41 +1,38 @@
-{% extends 'core/_base.html' %} {% block content %}
-<h1 >👤 {{ customer }}</h1>
-<p>{{ date_long_str }}</p>
-<div class="grid">
-  <form action="{% url 'core:cliente' customer_id=customer.id %}">
-      <input id="date-input" type="date" name="date" aria-label="Date" value="{{ date_iso_str }}" onchange="dateFormHandler(event)" />
-  </form>
-  <form action="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" method="get">
-    <button class="secondary">Valores por defecto diarios</button>
-  </form>
-  <form action="{% url 'core:editar-cliente' customer_id=customer.id %}" method="get">
-    <button class="contrast">Editar datos del cliente</button>
-  </form>
-</div>
-<form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST" class="bounded-width">
-  {% csrf_token %}
-  <table>
+{% extends 'core/_base.html' %}
+{% block content %}
+  <h1>{{ customer }}</h1>
+  <p class="caption">{{ date_long_str }}</p>
+  <div class="page-actions">
+    <form action="{% url 'core:cliente' customer_id=customer.id %}">
+      <input type="date" name="date" value="{{ date_iso_str }}" onchange="this.form.submit()" />
+    </form>
+    <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" class="btn">Valores por defecto</a>
+    <a href="{% url 'core:editar-cliente' customer_id=customer.id %}" class="btn btn-edit">Editar cliente</a>
+  </div>
+  <form action="{% url 'core:cliente' customer_id=customer.id date=date %}" method="POST">
+    {% csrf_token %}
+    <table class="table">
       <thead>
         <tr>
-          <th scope="col">Tipo de pan</th>
-          <th scope="col">Total</th>
+          <th>Tipo de pan</th>
+          <th class="col-right">Cantidad</th>
         </tr>
-      <thead>        
+      </thead>
       <tbody>
-      {% for order in orders %}
-      <tr>
-          <th scope="row">
-            <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
-          </th>
-          <td>
-            <fieldset role="group">
-              <input name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}"/>
-            </fieldset>
-          </td>
-      </tr>
-      {% endfor %}
+        {% for order in orders %}
+          <tr>
+            <th scope="row">
+              <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
+            </th>
+            <td class="col-right">
+              <input class="input-qty" name="{{ order.id }}" id="choice{{ forloop.counter }}" value="{{ order.number }}" />
+            </td>
+          </tr>
+        {% endfor %}
       </tbody>
-  </table>
-  <button type="submit" >Guardar</button>
-</form>
+    </table>
+    <div style="margin-top: 24px;">
+      <button type="submit" class="btn">Guardar</button>
+    </div>
+  </form>
 {% endblock %}

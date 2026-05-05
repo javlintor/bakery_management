@@ -1,18 +1,14 @@
-{% extends 'core/_base.html' %} {% block content %}
-  <div>
-    <h1>📋 Clientes</h1>
+{% extends 'core/_base.html' %}
+{% block content %}
+  <h1>Clientes</h1>
+  <div class="page-actions" style="margin-top: 24px;">
+    <a href="{% url 'core:crear-cliente' %}" class="btn">Añadir nuevo cliente</a>
   </div>
-  <section>
-    <form style="display: inline" action="{% url 'core:crear-cliente' %}">
-      <button>Añadir nuevo cliente</button>
-    </form>
-    <input type="text" id="customerSearchInput" onkeyup="filterCustomers()" placeholder="filtrar cliente" style='margin-top: 20px'/>
-    <ul style="margin-top: 2vh" id="customers">
-      {% for customer in customers %}
-        <li>
-          <a href="{% url 'core:cliente' customer_id=customer.id %}" class="customer-list-element underline">{{ customer }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </section>
+  <ul class="item-list">
+    {% for customer in customers %}
+      <li>
+        <a href="{% url 'core:cliente' customer_id=customer.id %}">{{ customer }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

@@ -1,45 +1,43 @@
-<!-- templates/_base.html -->
-
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manoli Bakes</title>
     <link rel="icon" type="image/x-icon" href="{% static 'images/logo.webp' %}" />
-    <link rel="stylesheet" href="{% static 'core/style.css' %}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.green.min.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css"
-    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+NKo+Unjoined&family=Young+Serif&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'core/style.css' %}" />
   </head>
-
   <body>
-    <header class="header">
-      <a href="{% url 'core:index' %}" class="header-element header-title">Manoli Bakes</a>
-      <div style="display: flex; gap: 0.5em">
-          <a href="{% url 'core:pedidos' %}" class="header-element underline">Pedidos</a>
-          <a href="{% url 'core:clientes' %}" class="header-element underline">Clientes</a>
-          <a href="{% url 'core:panes' %}" class="header-element underline">Panes</a>
-      </div>
+    <header class="nav">
+      <a href="{% url 'core:index' %}" class="nav-brand">Manoli Bakes</a>
+      <nav class="nav-links">
+        <a href="{% url 'core:pedidos' %}" class="nav-link">Pedidos</a>
+        <a href="{% url 'core:clientes' %}" class="nav-link">Clientes</a>
+        <a href="{% url 'core:panes' %}" class="nav-link">Panes</a>
+      </nav>
       {% if user.is_authenticated %}
-        <a href="{% url 'members:logout' %}" class="header-element underline" style="color: #bbb">Logout</a>
+        <a href="{% url 'members:logout' %}" class="nav-auth">Logout</a>
       {% else %}
-        <a href="{% url 'members:login' %}" class="header-element underline" style="color: #bbb">Login</a>
+        <a href="{% url 'members:login' %}" class="nav-auth">Login</a>
       {% endif %}
     </header>
     <main class="container">
-      {% block content %}
-
-      {% endblock %}
+      {% block content %}{% endblock %}
     </main>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="toast">{{ message }}</div>
+      {% endfor %}
+      <script>
+        document.querySelectorAll('.toast').forEach(function(el) {
+          setTimeout(function() { el.remove(); }, 2500);
+        });
+      </script>
+    {% endif %}
   </body>
-  <script src="{% static 'core/script.js' %}"></script>
 </html>

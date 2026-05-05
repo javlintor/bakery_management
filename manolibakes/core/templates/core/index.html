@@ -1,26 +1,24 @@
 {% extends 'core/_base.html' %}
 {% block content %}
-  <h1>✍️ Pedidos</h1>
-  <p>{{ date_long_str }}</p>
-  <form action="{% url 'core:pedidos' %}" class='date-picker'>
-    <input id="date-input" type="date" name="date" aria-label="Date" value="{{ date_iso_str }}" onchange="dateFormHandler(event)" />
+  <h1>Pedidos</h1>
+  <p class="caption">{{ date_long_str }}</p>
+  <form action="{% url 'core:pedidos' %}">
+    <input type="date" name="date" value="{{ date_iso_str }}" onchange="this.form.submit()" />
   </form>
-  <section class="bounded-width">
-    <table>
-      <thead>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tipo de pan</th>
+        <th class="col-right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
         <tr>
-          <th scope="col">Tipo de pan</th>
-          <th scope="col">Total</th>
+          <th scope="row">{{ order.name }}</th>
+          <td class="col-right">{{ order.number }}</td>
         </tr>
-      </thead>
-      <tbody>
-        {% for order in orders %}
-          <tr>
-            <th scope="row">{{ order.name }}</th>
-            <td>{{ order.number }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </section>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

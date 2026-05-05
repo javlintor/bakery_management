@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -57,6 +58,7 @@ def customer(request: HttpRequest, customer_id: int, date: str | None = None) ->
             save_customer_data(request=request, customer_id=customer_id, date=date)
         except ValueError:
             return HttpResponseBadRequest()
+        messages.success(request=request, message="Pedido guardado")
         return HttpResponseRedirect(
             reverse(
                 "core:cliente",
@@ -88,6 +90,7 @@ def customer_daily_defaults(request: HttpRequest, customer_id: int) -> HttpRespo
             save_customer_daily_defaults(request=request, customer_id=customer_id)
         except ValueError:
             return HttpResponseBadRequest()
+        messages.success(request=request, message="Valores por defecto guardados")
         return HttpResponseRedirect(
             reverse(
                 "core:cliente_valores_defecto_diarios",
@@ -107,6 +110,7 @@ def create_customer(request: HttpRequest, date: str | None = None) -> HttpRespon
     form = CustomerForm(data=post_data)
     if request.method == "POST" and form.is_valid():
         new_customer = form.save()
+        messages.success(request=request, message="Cliente creado")
         customer_url = reverse(
             viewname="core:cliente",
             kwargs={"customer_id": new_customer.id, "date": date},
@@ -132,6 +136,7 @@ def edit_customer(request: HttpRequest, customer_id: int, date: str | None = Non
         )
         if form.is_valid():
             new_customer = form.save()
+            messages.success(request=request, message="Cliente actualizado")
             return HttpResponseRedirect(
                 reverse(
                     "core:cliente",
@@ -151,12 +156,6 @@ def edit_customer(request: HttpRequest, customer_id: int, date: str | None = Non
     return render(request, "core/edit_customer.html", context)
 
 
-@login_required(login_url="members:login")
-def delete_customer(request: HttpRequest, customer_id: int) -> HttpResponse:
-    customer = get_object_or_404(Customer, pk=customer_id)
-    customer.delete()
-    return HttpResponseRedirect(reverse("core:clientes", kwargs={"date": None}))
-
 
 @login_required(login_url="members:login")
 def create_bread(request: HttpRequest) -> HttpResponse:
@@ -166,6 +165,7 @@ def create_bread(request: HttpRequest) -> HttpResponse:
         )
         if form.is_valid():
             form.save()
+            messages.success(request=request, message="Pan creado")
             return HttpResponseRedirect(reverse("core:panes"))
     context = {"form": BreadForm}
     return render(request, "core/create_bread.html", context)
@@ -181,6 +181,7 @@ def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
         )
         if form.is_valid():
             form.save()
+            messages.success(request=request, message="Pan actualizado")
             return HttpResponseRedirect(reverse("core:panes"))
     daily_defaults = list(
         DailyDefaults.objects.select_related("customer").filter(bread_id=bread_id)
