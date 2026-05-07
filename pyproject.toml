@@ -19,5 +19,12 @@ package = false
 [dependency-groups]
 dev = [
     "django-stubs>=5.0",
+    "poethepoet>=0.30",
     "ruff>=0.15.12",
 ]
+
+[tool.poe.tasks]
+runserver = "uv run --env-file .env python manolibakes/manage.py runserver"
+makemigrations = "uv run --env-file .env python manolibakes/manage.py makemigrations"
+migrate = "uv run --env-file .env python manolibakes/manage.py migrate"
+seed_db = "uv run --env-file .env python manolibakes/manage.py seed_db"
