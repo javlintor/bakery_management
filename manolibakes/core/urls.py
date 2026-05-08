@@ -13,6 +13,11 @@ urlpatterns = [
     path("pan/<int:bread_id>", views.bread, name="pan"),
     path("pan/create", views.create_bread, name="crear-pan"),
     path("pan/delete/<int:bread_id>", views.delete_bread, name="borrar-pan"),
+    path(
+        "pan/<int:bread_id>/quitar-imagen",
+        views.delete_bread_image,
+        name="quitar-imagen-pan",
+    ),
     path("cliente/<int:customer_id>", views.customer, name="cliente"),
     path("cliente/<int:customer_id>/<str:date>", views.customer, name="cliente"),
     path(

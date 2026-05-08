@@ -1,4 +1,7 @@
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
+
+from core.utils import resize_bread_image
 
 
 class Customer(models.Model):
@@ -18,6 +21,11 @@ class Customer(models.Model):
 
 class Bread(models.Model):
     name = models.CharField(max_length=200)
+    image = models.ImageField(
+        upload_to="breads/",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "bread"
@@ -25,6 +33,20 @@ class Bread(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def image_url(self) -> str | None:
+        return self.image.url if self.image else None
+
+    def save(self, *args: object, **kwargs: object) -> None:
+        if self.image and isinstance(self.image.file, UploadedFile):
+            resized_content = resize_bread_image(uploaded_file=self.image.file)
+            self.image.save(
+                name=resized_content.name,
+                content=resized_content,
+                save=False,
+            )
+        super().save(*args, **kwargs)
 
 
 

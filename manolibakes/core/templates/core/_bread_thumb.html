@@ -1,0 +1,8 @@
+{% load static %}
+{% if bread.image_url %}
+  <img src="{{ bread.image_url }}" alt="" class="{{ class|default:'bread-thumb' }}" />
+{% else %}
+  <span class="{{ class|default:'bread-thumb' }} bread-thumb-placeholder" aria-hidden="true">
+    <img src="{% static 'core/images/bread-placeholder.svg' %}" alt="" class="bread-thumb-placeholder-glyph" />
+  </span>
+{% endif %}

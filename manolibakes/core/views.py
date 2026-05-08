@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import messages
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
@@ -151,34 +151,33 @@ def edit_customer(request: HttpRequest, customer_id: int, date: str | None = Non
 
 def create_bread(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        form = BreadForm(
-            {field: request.POST.getlist(field)[0] for field in request.POST}
-        )
+        form = BreadForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request=request, message="Pan creado")
             return HttpResponseRedirect(reverse("core:panes"))
-    context = {"form": BreadForm}
+        context = {"form": form}
+        return render(request, "core/create_bread.html", context)
+    context = {"form": BreadForm()}
     return render(request, "core/create_bread.html", context)
 
 
 def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread = get_object_or_404(Bread, pk=bread_id)
     if request.method == "POST":
-        form = BreadForm(
-            {field: request.POST.getlist(field)[0] for field in request.POST},
-            instance=bread,
-        )
+        form = BreadForm(data=request.POST, files=request.FILES, instance=bread)
         if form.is_valid():
             form.save()
             messages.success(request=request, message="Pan actualizado")
             return HttpResponseRedirect(reverse("core:panes"))
+    else:
+        form = BreadForm(instance=bread)
     daily_defaults = list(
         DailyDefaults.objects.select_related("customer").filter(bread_id=bread_id)
     )
     total = sum(daily_default.number for daily_default in daily_defaults)
     context = {
-        "form": BreadForm(instance=bread),
+        "form": form,
         "bread": bread,
         "total": total,
         "daily_defaults": daily_defaults,
@@ -191,3 +190,17 @@ def delete_bread(request: HttpRequest, bread_id: int) -> HttpResponse:
     bread.delete()
     messages.success(request=request, message="Pan eliminado")
     return HttpResponseRedirect(reverse("core:panes"))
+
+
+def delete_bread_image(request: HttpRequest, bread_id: int) -> HttpResponse:
+    if request.method != "POST":
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
+    bread = get_object_or_404(Bread, pk=bread_id)
+    if bread.image:
+        bread.image.delete(save=False)
+        bread.image = None
+        bread.save()
+        messages.success(request=request, message="Imagen eliminada")
+    return HttpResponseRedirect(
+        reverse("core:pan", kwargs={"bread_id": bread_id}),
+    )

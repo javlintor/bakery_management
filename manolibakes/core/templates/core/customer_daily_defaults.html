@@ -9,6 +9,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th class="bread-thumb-cell"></th>
           <th>Tipo de pan</th>
           <th class="col-right">Cantidad</th>
         </tr>
@@ -16,6 +17,9 @@
       <tbody>
         {% for daily_default in daily_defaults %}
           <tr>
+            <td class="bread-thumb-cell">
+              {% include "core/_bread_thumb.html" with bread=daily_default %}
+            </td>
             <th scope="row">
               <label for="choice{{ forloop.counter }}">{{ daily_default.name }}</label>
             </th>

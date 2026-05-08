@@ -4,11 +4,12 @@
   <div class="page-actions" style="margin-top: 24px;">
     <a href="{% url 'core:crear-pan' %}" class="btn">Añadir nuevo pan</a>
   </div>
-  <ul class="item-list">
+  <div class="bread-grid">
     {% for bread in breads %}
-      <li>
-        <a href="{% url 'core:pan' bread_id=bread.id %}">{{ bread }}</a>
-      </li>
+      <a href="{% url 'core:pan' bread_id=bread.id %}" class="bread-tile">
+        {% include "core/_bread_thumb.html" with bread=bread class="bread-tile-image" %}
+        <span class="bread-tile-name">{{ bread.name }}</span>
+      </a>
     {% endfor %}
-  </ul>
+  </div>
 {% endblock %}

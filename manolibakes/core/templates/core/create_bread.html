@@ -1,7 +1,7 @@
 {% extends 'core/_base.html' %}
 {% block content %}
   <h1>Añadir un nuevo pan</h1>
-  <form method="post" style="max-width: 400px; margin-top: 24px;">
+  <form method="post" enctype="multipart/form-data" style="max-width: 400px; margin-top: 24px;">
     {% csrf_token %}
     {% for field in form %}
       <div class="form-group">

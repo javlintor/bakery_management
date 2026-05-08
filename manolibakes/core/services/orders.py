@@ -50,7 +50,12 @@ def get_orders(date: datetime.date) -> list[OrderDTO]:
     )
     breads = list(Bread.objects.all())
     result = [
-        OrderDTO(id=bread.id, name=bread.name, number=bread_totals.get(bread.id, 0))
+        OrderDTO(
+            id=bread.id,
+            name=bread.name,
+            number=bread_totals.get(bread.id, 0),
+            image_url=bread.image_url,
+        )
         for bread in breads
     ]
     result.sort(key=_order_dto_sort_key)

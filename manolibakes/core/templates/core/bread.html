@@ -1,23 +1,35 @@
 {% extends 'core/_base.html' %}
 {% block content %}
   <h1>{{ bread }}</h1>
-  <form method="post" style="max-width: 400px; margin-top: 24px;">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="form-group">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-          <ul class="form-errors">
-            {% for error in field.errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-edit">Editar</button>
-  </form>
+  <div class="bread-detail">
+    <div class="bread-detail-media">
+      {% include "core/_bread_thumb.html" with bread=bread class="bread-detail-image" %}
+      <span class="bread-detail-image-caption">Imagen actual</span>
+      {% if bread.image %}
+        <form action="{% url 'core:quitar-imagen-pan' bread_id=bread.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Quitar imagen</button>
+        </form>
+      {% endif %}
+    </div>
+    <form method="post" enctype="multipart/form-data" style="max-width: 400px;">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <ul class="form-errors">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-edit">Editar</button>
+    </form>
+  </div>
   <hr class="divider" />
   <form action="{% url 'core:borrar-pan' bread_id=bread.id %}">
     <button type="submit" class="btn btn-danger">Borrar pan</button>

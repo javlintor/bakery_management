@@ -39,7 +39,13 @@ def get_customer_final_orders(customer_id: int, date: datetime.date) -> list[Ord
         "-number", "name"
     )
     return [
-        OrderDTO(name=bread.name, id=bread.id, number=bread.number) for bread in breads
+        OrderDTO(
+            name=bread.name,
+            id=bread.id,
+            number=bread.number,
+            image_url=bread.image_url,
+        )
+        for bread in breads
     ]
 
 
@@ -57,7 +63,13 @@ def get_daily_defaults(customer_id: int) -> list[OrderDTO]:
     )
     breads = Bread.objects.annotate(number=number_annotation).order_by("name")
     return [
-        OrderDTO(name=bread.name, id=bread.id, number=bread.number) for bread in breads
+        OrderDTO(
+            name=bread.name,
+            id=bread.id,
+            number=bread.number,
+            image_url=bread.image_url,
+        )
+        for bread in breads
     ]
 
 

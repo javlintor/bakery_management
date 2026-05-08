@@ -41,12 +41,12 @@ Orders for a customer+bread+date are resolved with this priority:
 
 ### DTOs
 
-`core/dto.py` defines Pydantic models used as the return type of service functions. The only DTO currently is `OrderDTO(id, name, number)`.
+`core/dto.py` defines Pydantic models used as the return type of service functions. The only DTO currently is `OrderDTO(id, name, number, image_url)` — `image_url` is the bread image URL or `None`.
 
 ### Data Models (`core/models.py`)
 
 - **`Customer`** — `name`, `lastname` (unique together).
-- **`Bread`** — `name`.
+- **`Bread`** — `name`, optional `image` (`ImageField`, resized to ≤800×800 JPEG on upload via `Bread.save` override; helper `image_url` property returns the URL or `None`).
 - **`Order`** — `customer`, `bread`, `date`, `number` (unique on customer+bread+date).
 - **`DailyDefaults`** — `customer`, `bread`, `number` (unique on customer+bread). Acts as a standing order.
 
@@ -54,6 +54,10 @@ Orders for a customer+bread+date are resolved with this priority:
 
 - **Development:** SQLite at `../data/db.sqlite3` (relative to `manolibakes/`).
 - **Production:** PostgreSQL 14 via Docker Compose, configured through `debug.env`.
+
+### Media
+
+User-uploaded files (currently bread images) live under `MEDIA_ROOT = data/media/` and are served at `/media/`. Django serves them via `static()` only when `DEBUG=True`; production must serve `/media/` from the reverse proxy.
 
 ### Authentication
 

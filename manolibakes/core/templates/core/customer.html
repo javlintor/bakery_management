@@ -14,6 +14,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th class="bread-thumb-cell"></th>
           <th>Tipo de pan</th>
           <th class="col-right">Cantidad</th>
         </tr>
@@ -21,6 +22,9 @@
       <tbody>
         {% for order in orders %}
           <tr>
+            <td class="bread-thumb-cell">
+              {% include "core/_bread_thumb.html" with bread=order %}
+            </td>
             <th scope="row">
               <label for="choice{{ forloop.counter }}">{{ order.name }}</label>
             </th>

@@ -328,6 +328,169 @@ label {
   100% { opacity: 0; }
 }
 
+/* ===== Bread thumbnails (in tables) ===== */
+.bread-thumb {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--border-solid);
+  vertical-align: middle;
+  margin-right: 12px;
+  background: var(--surface);
+}
+
+.bread-thumb-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px dashed var(--border-solid);
+}
+
+.bread-thumb-placeholder-glyph {
+  width: 60%;
+  height: 60%;
+  opacity: 0.7;
+}
+
+.table .bread-thumb-cell {
+  padding-right: 0;
+  width: 60px;
+}
+
+/* ===== Bread tile grid (breads list page) ===== */
+.bread-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .bread-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+.bread-tile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-solid);
+  border-radius: 4px;
+  background: var(--bg);
+  overflow: hidden;
+  transition: border-color 100ms;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bread-tile:hover {
+  border-color: var(--text);
+}
+
+.bread-tile-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--surface);
+}
+
+.bread-tile-image.bread-thumb-placeholder {
+  width: 100%;
+  height: auto;
+  border: none;
+  border-bottom: 1px dashed var(--border-solid);
+  margin-right: 0;
+  vertical-align: baseline;
+}
+
+.bread-tile-name {
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text);
+}
+
+/* ===== Bread detail hero ===== */
+.bread-detail {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .bread-detail {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.bread-detail-media {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bread-detail-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid var(--border-solid);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.bread-detail-image.bread-thumb-placeholder {
+  border-style: dashed;
+  margin-right: 0;
+  width: 100%;
+  height: auto;
+  vertical-align: baseline;
+}
+
+.bread-detail-image-caption {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+input[type="file"] {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-solid);
+  border-radius: 4px;
+  padding: 8px 12px;
+  outline: none;
+  width: 100%;
+  color-scheme: dark;
+}
+
+input[type="file"]::file-selector-button {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 12px;
+  margin-right: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-solid);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  border-color: var(--text);
+}
+
 /* ===== Login ===== */
 .login-center {
   display: flex;
