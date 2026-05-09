@@ -1,0 +1,17 @@
+.git
+.venv
+__pycache__
+*.pyc
+data/
+.env
+.env.*
+poetry.lock
+*.sqlite3
+.idea
+.vscode
+.claude
+.pytest_cache
+.ruff_cache
+.mypy_cache
+node_modules
+plan.md
