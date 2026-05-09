@@ -52,8 +52,8 @@ Orders for a customer+bread+date are resolved with this priority:
 
 ### Database
 
-- **Development:** SQLite at `../data/db.sqlite3` (relative to `manolibakes/`).
-- **Production:** PostgreSQL 14 via Docker Compose, configured through `debug.env`.
+- SQLite at `../data/db.sqlite3` (relative to `manolibakes/`), used in both development and any current deployment.
+- PostgreSQL is planned for the future but is not wired up yet (no `psycopg` dependency, no Postgres engine in settings, no compose file).
 
 ### Media
 
