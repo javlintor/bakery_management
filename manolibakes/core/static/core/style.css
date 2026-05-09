@@ -7,17 +7,21 @@
 
 /* ===== Variables ===== */
 :root {
-  --bg: #201d1d;
-  --surface: #302c2c;
-  --text: #fdfcfc;
-  --text-secondary: #9a9898;
-  --text-muted: #6e6e73;
-  --border-solid: #646262;
-  --red: #ff3b30;
-  --red-hover: #d70015;
-  --orange: #ff9f0a;
-  --orange-hover: #cc7f08;
-  --green: #30d158;
+  --bg: #f5ead6;
+  --surface: #fbf3e0;
+  --text: #2e1f14;
+  --text-secondary: #7a6553;
+  --text-muted: #9a8775;
+  --border-warm: rgba(46, 31, 20, 0.14);
+  --border-solid: #c9a87c;
+  --accent: #b8732e;
+  --accent-hover: #955a20;
+  --red: #c0392b;
+  --red-hover: #962d22;
+  --orange: #d6a020;
+  --orange-hover: #a87c17;
+  --green: #6b8e23;
+  --green-hover: #56741c;
   --font: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
@@ -188,7 +192,7 @@ input[type="date"] {
   border-radius: 6px;
   padding: 8px 16px;
   outline: none;
-  color-scheme: dark;
+  color-scheme: light;
   transition: border-color 100ms;
 }
 
@@ -471,7 +475,7 @@ input[type="file"] {
   padding: 8px 12px;
   outline: none;
   width: 100%;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 input[type="file"]::file-selector-button {
@@ -505,4 +509,43 @@ input[type="file"]::file-selector-button:hover {
 
 .login-box h1 {
   margin-bottom: 32px;
+}
+
+/* ===== Confirm Dialog ===== */
+.confirm-dialog {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border-solid);
+  border-radius: 4px;
+  padding: 24px;
+  max-width: 420px;
+  width: calc(100% - 32px);
+  font-family: var(--font);
+  inset: 0;
+  margin: auto;
+}
+
+.confirm-dialog::backdrop {
+  background: rgba(46, 31, 20, 0.45);
+}
+
+.confirm-dialog-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.confirm-dialog-body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }

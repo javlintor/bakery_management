@@ -27,4 +27,5 @@ urlpatterns = [
     ),
     path("cliente/create", views.create_customer, name="crear-cliente"),
     path("cliente/edit/<int:customer_id>", views.edit_customer, name="editar-cliente"),
+    path("cliente/delete/<int:customer_id>", views.delete_customer, name="borrar-cliente"),
 ]

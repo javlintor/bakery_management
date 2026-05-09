@@ -1,4 +1,8 @@
 - [x] Poe tasks in pyproject
 - [x] Images on breads
-- [] Docker image
-- [] Change overall colors to personalize
+- [x] Docker image
+- [x] Change overall colors to personalize
+- [x] improve seed_db
+- [] improve Bread view
+- [] bread images in seed_db
+- [] barline with sent breads

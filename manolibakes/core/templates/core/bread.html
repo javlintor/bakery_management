@@ -31,9 +31,36 @@
     </form>
   </div>
   <hr class="divider" />
-  <form action="{% url 'core:borrar-pan' bread_id=bread.id %}">
-    <button type="submit" class="btn btn-danger">Borrar pan</button>
+  <form action="{% url 'core:borrar-pan' bread_id=bread.id %}" method="post" id="delete-bread-form">
+    {% csrf_token %}
+    <button type="button" class="btn btn-danger" data-confirm-open="delete-bread-dialog">Borrar pan</button>
   </form>
+  <dialog id="delete-bread-dialog" class="confirm-dialog">
+    <h2 class="confirm-dialog-title">¿Borrar pan?</h2>
+    <p class="confirm-dialog-body">Esta acción eliminará "{{ bread }}" y no se puede deshacer.</p>
+    <div class="confirm-dialog-actions">
+      <button type="button" class="btn" data-confirm-cancel="delete-bread-dialog">Cancelar</button>
+      <button type="submit" form="delete-bread-form" class="btn btn-danger">Borrar pan</button>
+    </div>
+  </dialog>
+  <script>
+    document.querySelectorAll('[data-confirm-open]').forEach(function(trigger) {
+      trigger.addEventListener('click', function() {
+        var dialog = document.getElementById(trigger.dataset.confirmOpen);
+        if (dialog && typeof dialog.showModal === 'function') {
+          dialog.showModal();
+        } else if (dialog) {
+          dialog.setAttribute('open', '');
+        }
+      });
+    });
+    document.querySelectorAll('[data-confirm-cancel]').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var dialog = document.getElementById(button.dataset.confirmCancel);
+        if (dialog) { dialog.close(); }
+      });
+    });
+  </script>
   <hr class="divider" />
   <h2>Valores por defecto diarios</h2>
   <p class="caption">Total diario: <mark>{{ total }} unidades</mark></p>

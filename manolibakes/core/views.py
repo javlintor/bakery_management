@@ -1,7 +1,11 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import messages
-from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseRedirect
+from django.http import (
+    HttpResponseBadRequest,
+    HttpResponseNotAllowed,
+    HttpResponseRedirect,
+)
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
@@ -47,7 +51,9 @@ def breads(request: HttpRequest) -> HttpResponse:
     return render(request, "core/breads.html", context)
 
 
-def customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
+def customer(
+    request: HttpRequest, customer_id: int, date: str | None = None
+) -> HttpResponse:
     if request.method == "POST":
         try:
             save_customer_data(request=request, customer_id=customer_id, date=date)
@@ -115,10 +121,14 @@ def create_customer(request: HttpRequest, date: str | None = None) -> HttpRespon
         "date_long_str": date_resolver.date_long_str,
         "form": form,
     }
-    return render(request=request, template_name="core/create_customer.html", context=context)
+    return render(
+        request=request, template_name="core/create_customer.html", context=context
+    )
 
 
-def edit_customer(request: HttpRequest, customer_id: int, date: str | None = None) -> HttpResponse:
+def edit_customer(
+    request: HttpRequest, customer_id: int, date: str | None = None
+) -> HttpResponse:
     date_resolver = DateResolver(date_str=date)
     customer = get_object_or_404(Customer, pk=customer_id)
     if request.method == "POST":
@@ -147,6 +157,14 @@ def edit_customer(request: HttpRequest, customer_id: int, date: str | None = Non
     }
     return render(request, "core/edit_customer.html", context)
 
+
+def delete_customer(request: HttpRequest, customer_id: int) -> HttpResponse:
+    if request.method != "POST":
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
+    customer = get_object_or_404(Customer, pk=customer_id)
+    customer.delete()
+    messages.success(request=request, message="Cliente eliminado")
+    return HttpResponseRedirect(reverse("core:clientes"))
 
 
 def create_bread(request: HttpRequest) -> HttpResponse:
@@ -186,6 +204,8 @@ def bread(request: HttpRequest, bread_id: int) -> HttpResponse:
 
 
 def delete_bread(request: HttpRequest, bread_id: int) -> HttpResponse:
+    if request.method != "POST":
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
     bread = get_object_or_404(Bread, pk=bread_id)
     bread.delete()
     messages.success(request=request, message="Pan eliminado")

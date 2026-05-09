@@ -34,10 +34,6 @@ class Bread(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    @property
-    def image_url(self) -> str | None:
-        return self.image.url if self.image else None
-
     def save(self, *args: object, **kwargs: object) -> None:
         if self.image and isinstance(self.image.file, UploadedFile):
             resized_content = resize_bread_image(uploaded_file=self.image.file)
@@ -48,6 +44,9 @@ class Bread(models.Model):
             )
         super().save(*args, **kwargs)
 
+    @property
+    def image_url(self) -> str | None:
+        return self.image.url if self.image else None
 
 
 class DailyDefaults(models.Model):
