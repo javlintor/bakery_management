@@ -3,7 +3,7 @@
   <h1>Pedidos</h1>
   <p class="caption">{{ date_long_str }}</p>
   <form action="{% url 'core:pedidos' %}">
-    <input type="date" name="date" value="{{ date_iso_str }}" onchange="this.form.submit()" />
+    <input type="text" class="date-picker" name="date" value="{{ date_iso_str }}" readonly onchange="this.form.submit()" />
   </form>
   <table class="table">
     <thead>

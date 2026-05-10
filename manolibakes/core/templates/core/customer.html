@@ -4,7 +4,7 @@
   <p class="caption">{{ date_long_str }}</p>
   <div class="page-actions">
     <form action="{% url 'core:cliente' customer_id=customer.id %}">
-      <input type="date" name="date" value="{{ date_iso_str }}" onchange="this.form.submit()" />
+      <input type="text" class="date-picker" name="date" value="{{ date_iso_str }}" readonly onchange="this.form.submit()" />
     </form>
     <a href="{% url 'core:cliente_valores_defecto_diarios' customer_id=customer.id %}" class="btn">Valores por defecto</a>
     <a href="{% url 'core:editar-cliente' customer_id=customer.id %}" class="btn btn-edit">Editar cliente</a>
