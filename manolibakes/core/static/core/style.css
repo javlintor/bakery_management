@@ -1,5 +1,7 @@
 /* ===== Reset ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -23,11 +25,14 @@
   --orange-hover: #a87c17;
   --green: #6b8e23;
   --green-hover: #56741c;
-  --font: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }
 
 /* ===== Base ===== */
-html, body {
+html,
+body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -135,7 +140,9 @@ mark {
   color: var(--text);
   cursor: pointer;
   text-decoration: none;
-  transition: border-color 100ms, color 100ms;
+  transition:
+    border-color 100ms,
+    color 100ms;
 }
 
 .btn:hover {
@@ -313,13 +320,13 @@ label {
 /* ===== Toast ===== */
 .toast {
   position: fixed;
-  bottom: 32px;
+  top: 32px;
   right: 32px;
   background: var(--surface);
   border: 1px solid var(--green);
   border-radius: 4px;
-  padding: 12px 20px;
-  font-size: 14px;
+  padding: 24px 40px;
+  font-size: 28px;
   font-weight: 500;
   color: var(--green);
   z-index: 1000;
@@ -327,10 +334,20 @@ label {
 }
 
 @keyframes toast-fade {
-  0%   { opacity: 0; transform: translateY(8px); }
-  15%  { opacity: 1; transform: translateY(0); }
-  75%  { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* ===== Bread thumbnails (in tables) ===== */
@@ -626,7 +643,9 @@ input.date-picker:focus {
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  transition: border-color 100ms, color 100ms;
+  transition:
+    border-color 100ms,
+    color 100ms;
 }
 
 .date-picker-nav:hover {
@@ -667,7 +686,10 @@ input.date-picker:focus {
   align-items: center;
   justify-content: center;
   padding: 0;
-  transition: background 100ms, border-color 100ms, color 100ms;
+  transition:
+    background 100ms,
+    border-color 100ms,
+    color 100ms;
 }
 
 .date-picker-day:hover {

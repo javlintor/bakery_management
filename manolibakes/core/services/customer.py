@@ -35,9 +35,7 @@ def get_customer_final_orders(customer_id: int, date: datetime.date) -> list[Ord
         Value(0),
         output_field=IntegerField(),
     )
-    breads = Bread.objects.annotate(number=number_annotation).order_by(
-        "-number", "name"
-    )
+    breads = Bread.objects.annotate(number=number_annotation).order_by("name")
     return [
         OrderDTO(
             name=bread.name,
@@ -133,4 +131,3 @@ def save_customer_data(
             customer_id=customer_id, bread_id=bread_id, date=date, number=number
         )
         new_order.save()
-
