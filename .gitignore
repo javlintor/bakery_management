@@ -8,6 +8,7 @@ stacks
 .env
 *.env
 /data
+media
 node_modules
 
 # AI agents
@@ -16,3 +17,4 @@ DESIGN.md
 # nvim
 *.nvim*
 *.vim
+
