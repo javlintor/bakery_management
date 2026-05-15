@@ -3,6 +3,8 @@
 - [x] Docker image
 - [x] Change overall colors to personalize
 - [x] improve seed_db
-- [] improve Bread view
-- [] bread images in seed_db
-- [] barline with sent breads
+- [x] improve Bread view
+- [] learn about wsgi, try to replicate a production environment in local (understand static and media file serving)
+- [] try project with a postgres ddbb, build a dockercompose
+- [] Readme
+- [] Add entry to portfolio (maybe just query readme)
