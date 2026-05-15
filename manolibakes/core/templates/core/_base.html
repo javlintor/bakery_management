@@ -22,7 +22,16 @@
         <a href="{% url 'core:panes' %}" class="nav-link">Panes</a>
       </nav>
       {% if user.is_authenticated %}
-        <a href="{% url 'members:logout' %}" class="nav-auth">Logout</a>
+        <div class="nav-auth-group">
+          <span class="nav-user">
+            <svg class="nav-user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+            </svg>
+            <span class="nav-user-name">{{ user.get_full_name|default:user.username }}</span>
+          </span>
+          <a href="{% url 'members:logout' %}" class="nav-auth">Logout</a>
+        </div>
       {% else %}
         <a href="{% url 'members:login' %}" class="nav-auth">Login</a>
       {% endif %}
