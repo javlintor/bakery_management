@@ -4,11 +4,32 @@
   <div class="page-actions" style="margin-top: 24px;">
     <a href="{% url 'core:crear-cliente' %}" class="btn">Añadir nuevo cliente</a>
   </div>
-  <ul class="item-list">
+  <div style="margin-top: 24px;">
+    <input
+      type="text"
+      id="customer-search"
+      placeholder="Buscar cliente..."
+      autocomplete="off"
+    />
+  </div>
+  <ul class="item-list" id="customer-list">
     {% for customer in customers %}
-      <li>
+      <li data-name="{{ customer|lower }}">
         <a href="{% url 'core:cliente' customer_id=customer.id %}">{{ customer }}</a>
       </li>
     {% endfor %}
   </ul>
+  <script>
+    (function () {
+      var input = document.getElementById('customer-search');
+      var items = document.querySelectorAll('#customer-list li');
+      input.addEventListener('input', function () {
+        var query = input.value.trim().toLowerCase();
+        items.forEach(function (item) {
+          var name = item.getAttribute('data-name') || '';
+          item.style.display = name.indexOf(query) === -1 ? 'none' : '';
+        });
+      });
+    })();
+  </script>
 {% endblock %}
