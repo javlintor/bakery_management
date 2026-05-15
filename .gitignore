@@ -9,6 +9,7 @@ stacks
 *.env
 /data
 media
+staticfiles
 node_modules
 
 # AI agents
