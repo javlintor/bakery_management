@@ -19,7 +19,7 @@
           <td class="bread-thumb-cell">
             {% include "core/_bread_thumb.html" with bread=order %}
           </td>
-          <th scope="row">{{ order.name }}</th>
+          <th scope="row"><a href="{% url 'core:pan' bread_id=order.id %}">{{ order.name }}</a></th>
           <td class="col-right">{{ order.number }}</td>
         </tr>
       {% endfor %}
