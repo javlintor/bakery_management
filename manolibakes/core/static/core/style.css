@@ -131,7 +131,7 @@ body {
 .container {
   max-width: 880px;
   margin: 0 auto;
-  padding: 48px;
+  padding: min(5vw, 48px);
 }
 
 /* ===== Typography ===== */
