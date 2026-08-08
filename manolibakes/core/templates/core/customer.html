@@ -1,7 +1,6 @@
 {% extends 'core/_base.html' %}
 {% block content %}
   <h1>{{ customer }}</h1>
-  <p class="caption">{{ date_long_str }}</p>
   <div class="page-actions">
     <form action="{% url 'core:cliente' customer_id=customer.id %}">
       <input type="text" class="date-picker" name="date" value="{{ date_iso_str }}" readonly onchange="this.form.submit()" />

@@ -34,7 +34,6 @@ def index(request: HttpRequest) -> HttpResponse:
         "orders": orders,
         "date": resolved_date,
         "date_iso_str": date_resolver.date_iso_str,
-        "date_long_str": date_resolver.date_long_str,
     }
     return render(request, "core/index.html", context)
 
@@ -79,7 +78,6 @@ def customer(
         "orders": orders,
         "date": resolved_date,
         "date_iso_str": date_resolver.date_iso_str,
-        "date_long_str": date_resolver.date_long_str,
     }
     return render(request, "core/customer.html", context)
 
@@ -118,7 +116,6 @@ def create_customer(request: HttpRequest, date: str | None = None) -> HttpRespon
     context = {
         "date": date_resolver.date,
         "date_iso_str": date_resolver.date_iso_str,
-        "date_long_str": date_resolver.date_long_str,
         "form": form,
     }
     return render(
@@ -151,7 +148,6 @@ def edit_customer(
     context = {
         "date": date_resolver.date,
         "date_iso_str": date_resolver.date_iso_str,
-        "date_long_str": date_resolver.date_long_str,
         "form": CustomerForm(instance=customer),
         "customer_id": customer.id,
     }

@@ -1,10 +1,14 @@
 {% extends 'core/_base.html' %}
+{% load static %}
 {% block content %}
   <h1>Pedidos</h1>
-  <p class="caption">{{ date_long_str }}</p>
-  <form action="{% url 'core:pedidos' %}">
-    <input type="text" class="date-picker" name="date" value="{{ date_iso_str }}" readonly onchange="this.form.submit()" />
-  </form>
+  <div class="page-actions">
+    <form action="{% url 'core:pedidos' %}">
+      <input type="text" class="date-picker" name="date" value="{{ date_iso_str }}" readonly onchange="this.form.submit()" />
+    </form>
+    <button type="button" class="btn" id="copy-orders-btn">Copiar pedido</button>
+  </div>
+  <script defer src="{% static 'core/orders_copy.js' %}"></script>
   <table class="table">
     <thead>
       <tr>

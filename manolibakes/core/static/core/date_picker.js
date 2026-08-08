@@ -10,7 +10,6 @@
     weekday: 'long',
     day: 'numeric',
     month: 'long',
-    year: 'numeric',
   });
 
   function parseIsoDate(iso) {
