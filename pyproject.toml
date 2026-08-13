@@ -23,6 +23,7 @@ dev = [
     "django-stubs>=5.0",
     "poethepoet>=0.30",
     "ruff>=0.15.12",
+    "ty>=0.0.71",
 ]
 
 [tool.poe.tasks]
