@@ -4,7 +4,6 @@
   <div class="bread-detail">
     <div class="bread-detail-media">
       {% include "core/_bread_thumb.html" with bread=bread class="bread-detail-image" %}
-      <span class="bread-detail-image-caption">Imagen actual</span>
     </div>
     <form method="post" enctype="multipart/form-data" style="max-width: 400px;">
       {% csrf_token %}

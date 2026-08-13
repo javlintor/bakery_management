@@ -16,7 +16,7 @@ BREAD_IMAGE_ALLOWED_FORMATS = frozenset(("JPEG", "PNG", "WEBP"))
 
 class CustomerForm(ModelForm):
     name = forms.CharField(label="Nombre", max_length=100)
-    lastname = forms.CharField(label="Apellidos", max_length=100)
+    lastname = forms.CharField(label="Apellidos", max_length=100, required=False)
 
     class Meta:
         model = Customer
